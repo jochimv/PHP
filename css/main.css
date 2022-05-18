@@ -1,0 +1,37 @@
+.btn-padded{
+    padding: 10px 30px;
+}
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
+.h-custom {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+    margin-bottom: 30px !important;
+}
+
+.centered{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media screen and (max-width: 992px) {
+    .disappear {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .h-custom{
+        height: auto;
+
+    }
+    input{
+        max-height: 10px ;
+    }
+}
