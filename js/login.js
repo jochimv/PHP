@@ -1,14 +1,11 @@
 window.onload = () => {
 
     const email = document.getElementById('email');
-    const password1 = document.getElementById('password1');
-    const password2 = document.getElementById('password2');
-    const signUp = document.getElementById('signUp');
+    const password = document.getElementById('password');
+    const logIn = document.getElementById('logIn');
 
     const isValidPassword = () => {
-        return password1.value ===
-            password2.value
-            && password1.value.length >= 6 && password1.value.length <= 32
+        return password.value.length >= 6 && password.value.length <= 32;
     }
     const isValidEmail = () => {
         return String(email.value)
@@ -20,9 +17,9 @@ window.onload = () => {
 
     const checkBoth = () => {
         if (isValidEmail() && isValidPassword()) {
-            signUp.disabled = false;
+            logIn.disabled = false;
         } else {
-            signUp.disabled = true;
+            logIn.disabled = true;
         }
     }
 
@@ -30,7 +27,7 @@ window.onload = () => {
         elements.forEach(element => element.addEventListener('keyup', checkBoth))
     }
 
-    addCheckKeyupListeners([password1, password2, email]);
+    addCheckKeyupListeners([password, email]);
 
     checkBoth();
 }
