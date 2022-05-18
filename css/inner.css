@@ -1,0 +1,14 @@
+html,body{
+    height: 100%;
+    max-width: 1080px !important;
+    margin: 0 auto !important;
+}
+.btn-padded{
+    padding: 10px 30px;
+}
+
+.content{
+    margin-top: 70px;
+    padding-bottom: 40px;
+}
+

@@ -19,7 +19,7 @@ if (!empty($_POST)) {
         ':email' => $email
     ]);
     if ($mailQuery->rowCount() > 0) {
-         $mailExists = true;
+        $mailExists = true;
     }
 
     if (!$mailExists) {
@@ -57,7 +57,7 @@ if (!empty($_POST)) {
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script type="module" src="js/signup.js"></script>
-    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="css/outer.css">
 </head>
 
 <body>
@@ -99,8 +99,9 @@ if (!empty($_POST)) {
                         <button class="btn btn-primary btn-lg btn-padded" id="signUp">Sign up</button>
                     </div>
                     <div class="col-6">
-                        <p class="small fw-bold mt-2 pt-1 mb-0">Already have an account?</p> <a href="./login.php"
-                                                                                                class="link-danger">Log
+                        <p class="small fw-bold mt-2 pt-1 mb-0">Already have an account?</p>
+                        <a href="./login.php"
+                           class="link-danger">Log
                             in</a>
                     </div>
                 </div>
