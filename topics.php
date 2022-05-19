@@ -8,9 +8,10 @@ $deletedSuccesfully = false;
 $archivedSuccesfully = false;
 if (!empty($_POST)) {
     if (!empty($_POST['topic'])) {
-        $topicQuery = $db->prepare('SELECT * FROM Topic WHERE name=:name LIMIT 1;');
+        $topicQuery = $db->prepare('SELECT * FROM Topic WHERE name=:name AND User_id=:user_id LIMIT 1;');
         $topicQuery->execute([
-            ':name' => $_POST['topic']
+            ':name' => $_POST['topic'],
+            ':user_id' => $_SESSION['user_id']
         ]);
         if ($topicQuery->rowCount() > 0) {
             $topicExists = true;
@@ -78,11 +79,11 @@ $topics = $topicQuery->fetchAll(PDO::FETCH_ASSOC);
 
 <body>
 
-<nav class="navbar fixed-top navbar-expand-sm navbar-dark bg-primary ms-auto">
+<nav class="navbar navbar-expand-sm navbar-dark bg-primary ms-auto">
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav ms-auto me-5">
             <a class="nav-item nav-link active" href="#">Topics</a>
-            <a class="nav-item nav-link" href="#">Add topic</a>
+            <a class="nav-item nav-link" href="./archived.php">Archived topics</a>
             <a class="nav-item nav-link" href="#">Pricing</a>
             <a class="nav-item nav-link" href="./logout.php">Log out</a>
         </div>
@@ -122,23 +123,35 @@ $topics = $topicQuery->fetchAll(PDO::FETCH_ASSOC);
                 <div class="col-12 pb-3">
                         <p class="text-center text-success h5 w-100 my-auto" >Topic archived successfully!</p>
                 </div>';
+    } else {
+        echo ' <div class="col-12 pb-3">
+                        <p class="text-center h5 w-100 my-auto" >&nbsp;</p>
+                </div>
+                ';
     }
     ?>
 
     <?php
-    foreach ($topics as $topic) {
-
-
+    if (empty($topics)) {
         echo "
+<div class='row my-3 d-flex flex-row align-items-center justify-content-center'> 
+<div class='col-12 my-auto'><p class='h2 text-center'>No topics there buddy</p>
+</div>
+</div>";
+
+    } else {
+        foreach ($topics as $topic) {
+            echo "
 <form class='row my-3 d-flex'  method='post' action=''>
     <input type='hidden' name='id' value='" . $topic['id'] . "' readonly>
     <div class='col my-auto'><p class='h4 text-center'>" . $topic['name'] . "</p></div>
     <div class='col'><button type='submit' name='notes' class='btn btn-secondary btn-padded'>Notes</button></div>
-    <div class='col'><button type='submit' name='flashcards' class='btn btn-success btn-padded'>Flashcards</button></div>
+    <div class='col'><a type='submit' href='./flashcards?topic=" . $topic['name'] . "' class='btn btn-success btn-padded'>Flashcards</a></div>
     <div class='col'><button type='submit' name='archive' class='btn btn-info btn-padded'>Archive</button></div>
     <div class='col'><button type='submit' name='delete' class='btn btn-danger btn-padded'>Delete</button></div>
 </form>    
 ";
+        }
     }
     ?>
 

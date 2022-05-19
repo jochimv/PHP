@@ -1,0 +1,103 @@
+<?php
+require_once '../utils/user.php';
+require_once '../utils/checktopic.php';
+
+$addedSuccessfully = false;
+$flashcardAlreadyExists = false;
+
+if (!empty($_POST) ) {
+    $checkQuery = $db->prepare('SELECT * FROM Topic WHERE name=:name AND User_id=:user_id LIMIT 1;');
+    $checkQuery->execute([
+        ':name' => $_GET['topic'],
+        ':user_id' => $_SESSION['user_id']
+    ]);
+    if ($topic = $checkQuery->fetch(PDO::FETCH_ASSOC)) {
+        //naplníme pomocné proměnné daty příspěvku
+        $id = $topic['id'];
+
+        $flashcardNameQuery = $db->prepare('SELECT * FROM Flashcard INNER JOIN Topic ON Flashcard.Topic_id = Topic.id WHERE Flashcard.question=:question AND Topic.User_id=:user_id AND Flashcard.Topic_id=:topic_id LIMIT 1;');
+        $flashcardNameQuery->execute([
+            ':question' => $_POST['question'],
+            ':user_id' => $_SESSION['user_id'],
+            ':topic_id' => $id
+        ]);
+
+        if ($flashcardNameQuery->rowCount() == 1) {
+
+            $flashcardAlreadyExists = true;
+        } else {
+            $saveQuery = $db->prepare('INSERT INTO Flashcard (question,answer,Topic_id) VALUES (:question,:answer,:topic_id);');
+            $saveQuery->execute([
+                ':question' => $_POST["question"],
+                ':answer' => $_POST['answer'],
+                ':topic_id' => $id
+            ]);
+            $addedSuccessfully = true;
+        }
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/inner.css">
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-sm navbar-dark bg-primary ms-auto">
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav ms-auto me-5">
+            <a class="nav-item nav-link" href="../topics.php">Topics</a>
+            <a class="nav-item nav-link" href="../archived.php">Archived topics</a>
+            <a class="nav-item nav-link" href="#">Pricing</a>
+            <a class="nav-item nav-link" href="../logout.php">Log out</a>
+        </div>
+    </div>
+</nav>
+
+<main class="content">
+    <div class="d-flex flex-row align-items-center justify-content-center">
+        <div class="col-6 h5"><?= $_GET['topic'] ?> - add a flashcard</div>
+        <?php if ($addedSuccessfully) {
+            echo '<div class="col-6 text-success h5">New flashcard added!</div>';
+        } else if ($flashcardAlreadyExists) {
+
+            echo '<div class="col-6 text-danger h5">Flashcard with this name already exists</div>';
+        } else {
+            echo '<div class="col-6 text-danger h5">&nbsp;</div>';
+        }
+        ?>
+    </div>
+
+
+    <form method="post" action="" class="gapped-form">
+        <div class="form-group">
+            <label for="question">Add a question</label>
+            <input type="text" class="form-control" id="question" name="question" required
+                   placeholder="What is Forrest Gump’s email password?">
+        </div>
+
+        <div class="form-group">
+            <label for="answer">Add an answer</label>
+            <textarea class="form-control" id="answer" name="answer" required placeholder="1forrest1" rows="3"></textarea>
+        </div>
+
+        <div class="col-3">
+            <button class='btn btn-secondary btn-padded'>Add</button>
+        </div>
+    </form>
+
+</main>
+</body>
+
+</html>
