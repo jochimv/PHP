@@ -57,6 +57,7 @@ if (!empty($_POST)) {
     </div>
 </nav>
 
+
 <main class="content">
     <div class="d-flex flex-row align-items-center justify-content-center">
         <div class="col-6 h5"><?= $_GET['topic'] ?> - add a flashcard</div>
