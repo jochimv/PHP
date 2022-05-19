@@ -42,7 +42,7 @@ $id = getTopicId();
     <div class='row my-3 d-flex align-items-center justify-content-center' >
         <div class='col-4 d-flex align-items-center justify-content-center '><a href='./add.php?topic=<?= $_GET['topic']?>' class='btn btn-success btn-padded'>Add</a></div>
         <div class='col-4 d-flex align-items-center justify-content-center'><a href='./manage.php?topic=<?= $_GET['topic']?>' class='btn btn-info btn-padded'>Manage</a></div>
-        <div class='col-4 d-flex align-items-center justify-content-center'><a type='./study.php?topic=<?= $_GET['topic']?>' class='btn btn-danger btn-padded'>Study</a></div>
+        <div class='col-4 d-flex align-items-center justify-content-center'><a href='./study.php?topic=<?= $_GET['topic']?>' class='btn btn-danger btn-padded'>Study</a></div>
     </div>
 
 </main>
