@@ -19,6 +19,10 @@ html,body{
     row-gap: 20px;
 }
 
+.change-account-form{
+    padding-bottom: 30px !important;
+}
+
 .text-fit{
     max-width: 30%;
     width: 30%;
