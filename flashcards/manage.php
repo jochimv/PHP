@@ -47,6 +47,7 @@ $flashcards = $flashcardQuery->fetchAll(PDO::FETCH_ASSOC);
 <body>
 
 <nav class="navbar navbar-expand-sm navbar-dark bg-primary ms-auto">
+    <div class="navbar-brand"><?= $_SESSION['user_email']?></div>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav ms-auto me-5">
             <a class="nav-item nav-link" href="../topics.php">Topics</a>
@@ -60,7 +61,7 @@ $flashcards = $flashcardQuery->fetchAll(PDO::FETCH_ASSOC);
 <main class="content">
     <div class="d-flex flex-row align-items-center justify-content-center">
         <div class="col-4 d-flex align-items-center justify-content-center ">
-            <div class="row text-center h5 my-3"><?= $_GET['topic'] ?> - manage topics</div>
+            <div class="row text-center h5 my-3"><?= $_GET['topic'] ?> - manage flashcards</div>
         </div>
         <div class="col-4 d-flex align-items-center justify-content-center ">
             <div class="row text-center text-success h5 my-3"><?php echo $deletedSuccessfully? 'Topic deleted successfully!' : '&nbsp;' ?></div>
@@ -82,12 +83,12 @@ $flashcards = $flashcardQuery->fetchAll(PDO::FETCH_ASSOC);
     } else {
         foreach ($flashcards as $flashcard) {
             echo "
-<form class='row my-3 d-flex' method='post' action=''>
+<form class='row my-3 d-flex' method='post' action='' >
     <input type='hidden' name='id' value='" . $flashcard['id'] . "' readonly>
-    <div class='col my-auto'><p class='h4 text-center'>" . $flashcard['question'] . "</p></div>
-    <div class='col my-auto'><p class='h4 text-center'>" . $flashcard['answer'] . "</p></div>
-    <div class='col'><button type='submit' name='adjust' class='btn btn-secondary btn-padded'>Adjust</button></div>
-     <div class='col'><button type='submit' name='delete' class='btn btn-danger btn-padded'>Delete</button></div>
+    <div class='col my-auto text-fit' ><p class='h5 text-center text-wrap mw-40'>" . $flashcard['question'] . "</p></div>
+    <div class='col my-auto text-fit'><p class='h5 text-center text-wrap'>" . $flashcard['answer'] . "</p></div>
+    <div class='col-2'><button type='submit' name='adjust' class='btn btn-info btn-padded'>Adjust</button></div>
+     <div class='col-2'><button type='submit' name='delete' class='btn btn-danger btn-padded'>Delete</button></div>
 </form>    
 ";
         }

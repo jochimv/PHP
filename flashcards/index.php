@@ -23,6 +23,7 @@ $id = getTopicId();
 <body>
 
 <nav class="navbar navbar-expand-sm navbar-dark bg-primary ms-auto">
+    <div class="navbar-brand"><?= $_SESSION['user_email']?></div>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav ms-auto me-5">
             <a class="nav-item nav-link" href="../topics.php">Topics</a>

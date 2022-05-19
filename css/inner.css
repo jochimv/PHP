@@ -18,3 +18,19 @@ html,body{
     flex-direction: column;
     row-gap: 20px;
 }
+
+.text-fit{
+    max-width: 30%;
+    width: 30%;
+    word-wrap: break-word;
+}
+
+.navbar-brand{
+    margin-left: 30px;
+}
+
+@media screen and (max-width: 624px){
+    .navbar-brand{
+        display: none;
+    }
+}
