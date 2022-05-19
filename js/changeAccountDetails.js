@@ -10,9 +10,13 @@ window.onload = () => {
     const resultAreaPassword = document.getElementById('resultAreaPassword');
 
     const isPasswordValid = () => {
+        if (resultAreaPassword.classList.contains('text-success')) {
+            resultAreaPassword.classList.remove('text-success');
+            resultAreaPassword.classList.add('text-danger');
+        }
         const okayLength = (password1.value.length >= 6 && password1.value.length <= 32) ||
             (password2.value.length >= 6 && password2.value.length <= 32);
-        if (!okayLength){
+        if (!okayLength) {
             resultAreaPassword.innerText = "Password must have between 6 and 32 characters ";
             return false;
         }
@@ -38,14 +42,24 @@ window.onload = () => {
     };
 
     const passwordInputHandler = () => {
-        if (isPasswordValid()){
+        if (resultAreaPassword.classList.contains('text-success')) {
+            resultAreaPassword.classList.remove('text-success');
+            resultAreaPassword.classList.add('text-danger');
+        }
+        if (isPasswordValid()) {
             changePasswordButton.disabled = false;
         } else {
             changePasswordButton.disabled = true;
         }
     }
     const emailInputHandler = () => {
-        if(isEmailValid()){
+        if (resultAreaEmail.classList.contains('text-success')) {
+            resultAreaEmail.classList.remove('text-success');
+            resultAreaEmail.classList.add('text-danger');
+            resultAreaEmail.innerText = '';
+        }
+        
+        if (isEmailValid()) {
             changeEmailButton.disabled = false;
         } else {
             resultAreaEmail.innerText = 'But that\'s not an email!';
@@ -53,9 +67,9 @@ window.onload = () => {
         }
     }
 
-    password1.addEventListener('keyup',passwordInputHandler);
-    password2.addEventListener('keyup',passwordInputHandler);
-    email.addEventListener('keyup',emailInputHandler);
+    password1.addEventListener('keyup', passwordInputHandler);
+    password2.addEventListener('keyup', passwordInputHandler);
+    email.addEventListener('keyup', emailInputHandler);
 
     changePasswordButton.disabled = true;
     changeEmailButton.disabled = true;

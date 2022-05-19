@@ -1,7 +1,32 @@
 <?php
 require_once 'utils/user.php';
 
-var_dump($_POST);
+$emailChangedSuccessfully = false;
+$passwordChangedSuccessfully = false;
+$mailExists = false;
+if(isset($_POST['password1'])){
+    $password = password_hash($_POST['password1'], PASSWORD_DEFAULT);
+
+    $sql = "UPDATE User_app SET password=? WHERE id=?";
+    $stmt = $db->prepare($sql);
+    $stmt->execute([$password,$_SESSION['user_id']]);
+    $passwordChangedSuccessfully = true;
+} else if (isset($_POST['email'])){
+    $mailQuery = $db->prepare('SELECT * FROM User_app WHERE email=:email LIMIT 1;');
+    $mailQuery->execute([
+        ':email' => $_POST['email']
+    ]);
+    if ($mailQuery->rowCount() > 0) {
+        $mailExists = true;
+    } else {
+        $sql = "UPDATE User_app SET email=? WHERE id=?";
+        $stmt = $db->prepare($sql);
+        $stmt->execute([$_POST['email'],$_SESSION['user_id']]);
+        $emailChangedSuccessfully = true;
+        $_SESSION['user_email'] = $_POST['email'];
+    }
+}
+
 ?>
 
 
@@ -48,7 +73,15 @@ var_dump($_POST);
                 <button type="submit" class="btn btn-padded btn-success" id="changeEmail">Change</button>
             </div>
             <div class="col-8">
-                <h3 class="text-danger" id="resultAreaEmail"></h3>
+                <?php
+                if ($emailChangedSuccessfully){
+                    echo '<h3 class="text-success" id="resultAreaEmail">Email changed successfully!</h3>';
+                }elseif ($mailExists){
+                    echo '<h3 class="text-danger" id="resultAreaEmail">This email is already in use</h3>';
+                } else {
+                    echo '<h3 class="text-danger" id="resultAreaEmail"></h3>';
+                }
+                ?>
             </div>
         </div>
     </form>
@@ -69,7 +102,13 @@ var_dump($_POST);
                 </button>
             </div>
             <div class="col-8">
-                <h3 class="text-danger" id="resultAreaPassword"></h3>
+                <?php
+                 if ($passwordChangedSuccessfully){
+                     echo '<h3 class="text-success" id="resultAreaPassword">Password changed successfully!</h3>';
+                 }else{
+                   echo '<h3 class="text-danger" id="resultAreaPassword"></h3>';
+                 }
+                ?>
             </div>
         </div>
     </form>
