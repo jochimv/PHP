@@ -58,7 +58,7 @@ window.onload = () => {
             resultAreaEmail.classList.add('text-danger');
             resultAreaEmail.innerText = '';
         }
-        
+
         if (isEmailValid()) {
             changeEmailButton.disabled = false;
         } else {

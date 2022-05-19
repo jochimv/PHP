@@ -146,7 +146,7 @@ $flashcards = $topicQuery->fetchAll(PDO::FETCH_ASSOC);
 <form class='row my-3 d-flex'  method='post' action=''>
     <input type='hidden' name='id' value='" . $topic['id'] . "' readonly>
     <div class='col my-auto'><p class='h4 text-center'>" . $topic['name'] . "</p></div>
-    <div class='col'><button type='submit' name='notes' class='btn btn-secondary btn-padded'>Notes</button></div>
+    <div class='col'><a type='submit' class='btn btn-secondary btn-padded' href='./notes?topic=" . $topic['name'] . "'>Notes</a></div>
     <div class='col'><a type='submit' href='./flashcards?topic=" . $topic['name'] . "' class='btn btn-success btn-padded'>Flashcards</a></div>
     <div class='col'><button type='submit' name='archive' class='btn btn-info btn-padded'>Archive</button></div>
     <div class='col'><button type='submit' name='delete' class='btn btn-danger btn-padded'>Delete</button></div>
