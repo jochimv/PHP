@@ -1,40 +1,31 @@
 <?php
 require_once '../utils/user.php';
-require_once '../utils/checktopic.php';
+require_once '../utils/functions.php';
 
 $addedSuccessfully = false;
 $flashcardAlreadyExists = false;
-
-if (!empty($_POST) ) {
-    $checkQuery = $db->prepare('SELECT * FROM Topic WHERE name=:name AND User_id=:user_id LIMIT 1;');
-    $checkQuery->execute([
-        ':name' => $_GET['topic'],
-        ':user_id' => $_SESSION['user_id']
+$id = getTopicId();
+if (!empty($_POST)) {
+    $flashcardNameQuery = $db->prepare('SELECT * FROM Flashcard INNER JOIN Topic ON Flashcard.Topic_id = Topic.id WHERE Flashcard.question=:question AND Topic.User_id=:user_id AND Flashcard.Topic_id=:topic_id LIMIT 1;');
+    $flashcardNameQuery->execute([
+        ':question' => $_POST['question'],
+        ':user_id' => $_SESSION['user_id'],
+        ':topic_id' => $id
     ]);
-    if ($topic = $checkQuery->fetch(PDO::FETCH_ASSOC)) {
-        //naplníme pomocné proměnné daty příspěvku
-        $id = $topic['id'];
 
-        $flashcardNameQuery = $db->prepare('SELECT * FROM Flashcard INNER JOIN Topic ON Flashcard.Topic_id = Topic.id WHERE Flashcard.question=:question AND Topic.User_id=:user_id AND Flashcard.Topic_id=:topic_id LIMIT 1;');
-        $flashcardNameQuery->execute([
-            ':question' => $_POST['question'],
-            ':user_id' => $_SESSION['user_id'],
+    if ($flashcardNameQuery->rowCount() == 1) {
+
+        $flashcardAlreadyExists = true;
+    } else {
+        $saveQuery = $db->prepare('INSERT INTO Flashcard (question,answer,Topic_id) VALUES (:question,:answer,:topic_id);');
+        $saveQuery->execute([
+            ':question' => $_POST["question"],
+            ':answer' => $_POST['answer'],
             ':topic_id' => $id
         ]);
-
-        if ($flashcardNameQuery->rowCount() == 1) {
-
-            $flashcardAlreadyExists = true;
-        } else {
-            $saveQuery = $db->prepare('INSERT INTO Flashcard (question,answer,Topic_id) VALUES (:question,:answer,:topic_id);');
-            $saveQuery->execute([
-                ':question' => $_POST["question"],
-                ':answer' => $_POST['answer'],
-                ':topic_id' => $id
-            ]);
-            $addedSuccessfully = true;
-        }
+        $addedSuccessfully = true;
     }
+
 }
 ?>
 
@@ -89,11 +80,18 @@ if (!empty($_POST) ) {
 
         <div class="form-group">
             <label for="answer">Add an answer</label>
-            <textarea class="form-control" id="answer" name="answer" required placeholder="1forrest1" rows="3"></textarea>
+            <textarea class="form-control" id="answer" name="answer" required placeholder="1forrest1"
+                      rows="3"></textarea>
         </div>
 
-        <div class="col-3">
-            <button class='btn btn-secondary btn-padded'>Add</button>
+        <div class="col-6 row">
+            <div class="col-4">
+            <button class='btn btn-primary btn-padded'>Add</button>
+            </div>
+            <div class="col-4">
+                <a class='btn btn-secondary btn-padded' href="./index.php?topic=<?=$_GET['topic']?>">Back</a>
+            </div>
+
         </div>
     </form>
 

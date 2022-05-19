@@ -1,6 +1,33 @@
 <?php
 require_once '../utils/user.php';
-require_once '../utils/checktopic.php';
+require_once '../utils/functions.php';
+$topicId = getTopicId();
+
+$deletedSuccessfully = false;
+if(isset($_POST['delete'])){
+    $flashcardId = $_POST['id'];
+    $checkQuery = $db->prepare('SELECT * FROM Flashcard INNER JOIN Topic ON Flashcard.Topic_id = Topic.id WHERE Flashcard.id=:id AND User_id=:user_id LIMIT 1;');
+    $checkQuery->execute([
+        ':id' => $flashcardId,
+        ':user_id' => $_SESSION['user_id']
+    ]);
+    if ($checkQuery->rowCount() == 1) {
+        $sql = "DELETE FROM Flashcard WHERE id=?";
+        $stmt = $db->prepare($sql);
+        $stmt->execute([$flashcardId]);
+        $deletedSuccessfully = true;
+    }
+
+}
+
+
+$flashcardQuery = $db->prepare('SELECT * FROM Flashcard WHERE Topic_id=:id;');
+$flashcardQuery->execute([
+    ':id' => $topicId
+]);
+
+$flashcards = $flashcardQuery->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -32,14 +59,42 @@ require_once '../utils/checktopic.php';
 
 <main class="content">
     <div class="d-flex flex-row align-items-center justify-content-center">
-        <div class="row text-center h5 my-3"><?= $_GET['topic'] ?></div>
+        <div class="col-4 d-flex align-items-center justify-content-center ">
+            <div class="row text-center h5 my-3"><?= $_GET['topic'] ?> - manage topics</div>
+        </div>
+        <div class="col-4 d-flex align-items-center justify-content-center ">
+            <div class="row text-center text-success h5 my-3"><?php echo $deletedSuccessfully? 'Topic deleted successfully!' : '&nbsp;' ?></div>
+        </div>
+        <div class="col-4 d-flex align-items-center justify-content-center ">
+            <a class='btn btn-secondary btn-padded' href="./index.php?topic=<?= $_GET['topic'] ?>">Back</a>
+        </div>
     </div>
 
-    <div class='row my-3 d-flex align-items-center justify-content-center' >
-        <div class='col-4 d-flex align-items-center justify-content-center '><a href='./add.php?topic=<?= $_GET['topic']?>' class='btn btn-success btn-padded'>Add</a></div>
-        <div class='col-4 d-flex align-items-center justify-content-center'><a href='./manage.php?topic=<?= $_GET['topic']?>' class='btn btn-info btn-padded'>Manage</a></div>
-        <div class='col-4 d-flex align-items-center justify-content-center'><a type='./study.php?topic=<?= $_GET['topic']?>' class='btn btn-danger btn-padded'>Study</a></div>
-    </div>
+
+    <?php
+    if (empty($flashcards)) {
+        echo "
+<div class='row my-3 d-flex flex-row align-items-center justify-content-center'> 
+<div class='col-12 my-auto'><p class='h2 text-center'>No flashcards found</p>
+</div>
+</div>";
+
+    } else {
+        foreach ($flashcards as $flashcard) {
+            echo "
+<form class='row my-3 d-flex' method='post' action=''>
+    <input type='hidden' name='id' value='" . $flashcard['id'] . "' readonly>
+    <div class='col my-auto'><p class='h4 text-center'>" . $flashcard['question'] . "</p></div>
+    <div class='col my-auto'><p class='h4 text-center'>" . $flashcard['answer'] . "</p></div>
+    <div class='col'><button type='submit' name='adjust' class='btn btn-secondary btn-padded'>Adjust</button></div>
+     <div class='col'><button type='submit' name='delete' class='btn btn-danger btn-padded'>Delete</button></div>
+</form>    
+";
+        }
+    }
+    ?>
+
+
 
 </main>
 </body>

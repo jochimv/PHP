@@ -1,7 +1,8 @@
 <?php
 
 require_once '../utils/user.php';
-require_once '../utils/checktopic.php';
+require_once '../utils/functions.php';
+$id = getTopicId();
 
 ?>
 

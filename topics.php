@@ -59,7 +59,7 @@ $topicQuery->execute([
     ':user_id' => $_SESSION['user_id']
 ]);
 
-$topics = $topicQuery->fetchAll(PDO::FETCH_ASSOC);
+$flashcards = $topicQuery->fetchAll(PDO::FETCH_ASSOC);
 
 
 ?>
@@ -132,7 +132,7 @@ $topics = $topicQuery->fetchAll(PDO::FETCH_ASSOC);
     ?>
 
     <?php
-    if (empty($topics)) {
+    if (empty($flashcards)) {
         echo "
 <div class='row my-3 d-flex flex-row align-items-center justify-content-center'> 
 <div class='col-12 my-auto'><p class='h2 text-center'>No topics there buddy</p>
@@ -140,7 +140,7 @@ $topics = $topicQuery->fetchAll(PDO::FETCH_ASSOC);
 </div>";
 
     } else {
-        foreach ($topics as $topic) {
+        foreach ($flashcards as $topic) {
             echo "
 <form class='row my-3 d-flex'  method='post' action=''>
     <input type='hidden' name='id' value='" . $topic['id'] . "' readonly>
