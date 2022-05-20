@@ -8,12 +8,12 @@ $deletedSuccesfully = false;
 $archivedSuccesfully = false;
 if (!empty($_POST)) {
     if (!empty($_POST['topic'])) {
-        $topicQuery = $db->prepare('SELECT * FROM Topic WHERE name=:name AND User_id=:user_id LIMIT 1;');
-        $topicQuery->execute([
+        $packagesWithoutNoteQuery = $db->prepare('SELECT * FROM Topic WHERE name=:name AND User_id=:user_id LIMIT 1;');
+        $packagesWithoutNoteQuery->execute([
             ':name' => $_POST['topic'],
             ':user_id' => $_SESSION['user_id']
         ]);
-        if ($topicQuery->rowCount() > 0) {
+        if ($packagesWithoutNoteQuery->rowCount() > 0) {
             $topicExists = true;
         } else {
 
@@ -54,12 +54,12 @@ if (!empty($_POST)) {
     }
 }
 
-$topicQuery = $db->prepare('SELECT * FROM Topic WHERE User_id=:user_id AND archived = FALSE;');
-$topicQuery->execute([
+$packagesWithoutNoteQuery = $db->prepare('SELECT * FROM Topic WHERE User_id=:user_id AND archived = FALSE;');
+$packagesWithoutNoteQuery->execute([
     ':user_id' => $_SESSION['user_id']
 ]);
 
-$flashcards = $topicQuery->fetchAll(PDO::FETCH_ASSOC);
+$flashcards = $packagesWithoutNoteQuery->fetchAll(PDO::FETCH_ASSOC);
 
 
 ?>

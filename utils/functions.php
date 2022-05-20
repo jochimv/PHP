@@ -19,3 +19,24 @@ function getTopicId()
         }
     }
 }
+
+function extractIds($data){
+    $values = [];
+    foreach ($data as $piece){
+        array_push($values,$piece['Topic_id']);
+    }
+    return $values;
+}
+
+function createNotInQuery($ids){
+    if(empty($ids)){
+        return 'SELECT * FROM Topic';
+    }
+    $query = "SELECT * FROM Topic WHERE id NOT IN (";
+    foreach ($ids as $id){
+        $query = $query . $id . ',';
+    }
+    return substr($query, 0, -1) . ');';
+
+}
+

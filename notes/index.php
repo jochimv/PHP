@@ -25,7 +25,6 @@ if (isset($_POST['delete'])) {
 
 }
 
-
 $notes = null;
 $allNotesQuery = $db->prepare('SELECT * FROM Note INNER JOIN Topic_Note ON Note.id = Topic_Note.Note_id WHERE Topic_Note.Topic_id=:topic_id;');
 
@@ -72,8 +71,11 @@ if ($allNotesQuery->rowCount() > 0) {
     <div class="d-flex flex-row align-items-center justify-content-center">
         <div class="col-4 text-center h5 my-3"><?= $_GET['topic'] ?> - notes</div>
         <div class="col-4 text-center h5 my-3 text-success"><?= $deletedSuccesfully ? 'Note deleted!' : '&nbsp;' ?></div>
-        <div class='col-4 d-flex align-items-center justify-content-center '><a
+        <div class='col-2 d-flex align-items-center justify-content-center '><a
                     href='./add.php?topic=<?= $_GET['topic'] ?>' class='btn btn-success btn-padded'>Add</a></div>
+        <div class="col-2 d-flex align-items-center justify-content-center">
+            <a class='btn btn-secondary btn-padded' href="../topics.php">Back</a>
+        </div>
     </div>
 
     <?php
@@ -86,8 +88,10 @@ if ($allNotesQuery->rowCount() > 0) {
         foreach ($notes as $note) {
             echo "<form class='my-3 d-flex flex-row align-items-center justify-content-center' method='post' action='' >
     <input type='hidden' name='id' value='" . $note['id'] . "' readonly>
-    <div class='col my-auto text-fit' ><a class='h5 text-center text-wrap mw-40' href='study.php?topic=" . $_GET['topic'] . "&id=" . $note['id'] . "'>" . $note['heading'] . "</a></div>
-     <div class='col-1'><button type='submit' name='delete' class='btn btn-danger btn-padded'>Delete</button></div>
+    <div class='col-4 my-auto text-fit d-flex align-items-center justify-content-center' ><a class='h5 text-center text-wrap mw-40' href='study.php?topic=" . $_GET['topic'] . "&id=" . $note['id'] . "'>" . $note['heading'] . "</a></div>
+     <div class='col-4 d-flex align-items-center justify-content-center'><button type='submit' name='delete' class='btn btn-danger btn-padded'>Delete everywhere</button></div>
+ 
+     <div class='col-4 d-flex align-items-center justify-content-center'><a type='submit' href='package_manager.php?topic=" .$_GET['topic']."&id=". $note['id'] . "' class='btn btn-info btn-padded'>Adjust packages</a></div>
 </form>    
 ";
         }
