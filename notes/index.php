@@ -4,6 +4,42 @@ require_once '../utils/user.php';
 require_once '../utils/functions.php';
 $id = getTopicId();
 
+
+
+$deletedSuccesfully = false;
+if (isset($_POST['delete'])) {
+
+    $allNotesQuery = $db->prepare('SELECT * FROM Note INNER JOIN Topic_Note ON Note.id = Topic_Note.Note_id WHERE Topic_Note.Topic_id=:topic_id AND Note.id=:id  LIMIT 1;');
+
+    $allNotesQuery->execute([
+        ':topic_id' => $id,
+        ':id' => $_POST['id']
+    ]);
+
+    if ($allNotesQuery->rowCount() == 1) {
+        $sql = "DELETE FROM Note WHERE id=?";
+        $stmt = $db->prepare($sql);
+        $stmt->execute([$_POST['id']]);
+        $deletedSuccesfully = true;
+    } else {
+        header('Location: ../topics.php');
+    }
+
+}
+
+
+$notes = null;
+$allNotesQuery = $db->prepare('SELECT * FROM Note INNER JOIN Topic_Note ON Note.id = Topic_Note.Note_id WHERE Topic_Note.Topic_id=:topic_id;');
+
+$allNotesQuery->execute([
+    ':topic_id' => $id,
+]);
+
+if ($allNotesQuery->rowCount() > 0) {
+    $notes = $allNotesQuery->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -23,7 +59,7 @@ $id = getTopicId();
 <body>
 
 <nav class="navbar navbar-expand-sm navbar-dark bg-primary ms-auto">
-    <div class="navbar-brand"><?= $_SESSION['user_email']?></div>
+    <div class="navbar-brand"><?= $_SESSION['user_email'] ?></div>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav ms-auto me-5">
             <a class="nav-item nav-link" href="../topics.php">Topics</a>
@@ -36,14 +72,30 @@ $id = getTopicId();
 
 <main class="content">
     <div class="d-flex flex-row align-items-center justify-content-center">
-        <div class="row text-center h5 my-3"><?= $_GET['topic'] ?>  - notes</div>
+        <div class="col-4 text-center h5 my-3"><?= $_GET['topic'] ?> - notes</div>
+        <div class="col-4 text-center h5 my-3 text-success"><?= $deletedSuccesfully ? 'Note deleted!' : '&nbsp;' ?></div>
+        <div class='col-4 d-flex align-items-center justify-content-center '><a
+                    href='./add.php?topic=<?= $_GET['topic'] ?>' class='btn btn-success btn-padded'>Add</a></div>
     </div>
 
-    <div class='row my-3 d-flex align-items-center justify-content-center' >
-        <div class='col-4 d-flex align-items-center justify-content-center '><a href='./add.php?topic=<?= $_GET['topic']?>' class='btn btn-success btn-padded'>Add</a></div>
-        <div class='col-4 d-flex align-items-center justify-content-center'><a href='./manage.php?topic=<?= $_GET['topic']?>' class='btn btn-info btn-padded'>Manage</a></div>
-        <div class='col-4 d-flex align-items-center justify-content-center'><a href='./study.php?topic=<?= $_GET['topic']?>' class='btn btn-danger btn-padded'>Study</a></div>
-    </div>
+    <?php
+    if ($notes === null) {
+        echo "<div class='row my-3 d-flex flex-row align-items-center justify-content-center'> 
+<div class='col-12 my-auto'><p class='h2 text-center'>No notes found</p>
+</div>
+</div>";
+    } else {
+        foreach ($notes as $note) {
+            echo "<form class='my-3 d-flex flex-row align-items-center justify-content-center' method='post' action='' >
+    <input type='hidden' name='id' value='" . $note['id'] . "' readonly>
+    <div class='col my-auto text-fit' ><a class='h5 text-center text-wrap mw-40'>" . $note['heading'] . "</a></div>
+     <div class='col-1'><button type='submit' name='delete' class='btn btn-danger btn-padded'>Delete</button></div>
+</form>    
+";
+        }
+    }
+
+    ?>
 
 </main>
 </body>
