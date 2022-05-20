@@ -32,11 +32,19 @@ if (!empty($_POST)) {
             ':user_id' => $_SESSION['user_id']
         ]);
         if ($checkQuery->rowCount() == 1) {
+
             $sql = "DELETE FROM Topic WHERE id=?";
             $stmt = $db->prepare($sql);
             $stmt->execute([$id]);
+
+            
+            $db->exec("DELETE FROM Note WHERE id NOT IN (SELECT Note_id FROM Topic_Note)");
+
             $deletedSuccesfully = true;
+
+
         }
+
 
     } elseif (isset($_POST['archive'])) {
         $id = $_POST['id'];

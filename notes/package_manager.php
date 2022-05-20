@@ -39,6 +39,9 @@ if (isset($_POST['add'])) {
         $updatedSuccessfully = true;
     }
     if(isset($_POST['delete'])){
+
+
+
         $sql = "DELETE FROM Note WHERE id=?";
         $stmt = $db->prepare($sql);
         $stmt->execute([$_GET['id']]);
