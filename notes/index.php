@@ -4,19 +4,17 @@ require_once '../utils/user.php';
 require_once '../utils/functions.php';
 $id = getTopicId();
 
-
-
 $deletedSuccesfully = false;
 if (isset($_POST['delete'])) {
 
-    $allNotesQuery = $db->prepare('SELECT * FROM Note INNER JOIN Topic_Note ON Note.id = Topic_Note.Note_id WHERE Topic_Note.Topic_id=:topic_id AND Note.id=:id  LIMIT 1;');
+    $noteBelongsToUser = $db->prepare('SELECT * FROM Note INNER JOIN Topic_Note ON Note.id = Topic_Note.Note_id WHERE Topic_Note.Topic_id=:topic_id AND Note.id=:id  LIMIT 1;');
 
-    $allNotesQuery->execute([
+    $noteBelongsToUser->execute([
         ':topic_id' => $id,
         ':id' => $_POST['id']
     ]);
 
-    if ($allNotesQuery->rowCount() == 1) {
+    if ($noteBelongsToUser->rowCount() == 1) {
         $sql = "DELETE FROM Note WHERE id=?";
         $stmt = $db->prepare($sql);
         $stmt->execute([$_POST['id']]);
@@ -88,7 +86,7 @@ if ($allNotesQuery->rowCount() > 0) {
         foreach ($notes as $note) {
             echo "<form class='my-3 d-flex flex-row align-items-center justify-content-center' method='post' action='' >
     <input type='hidden' name='id' value='" . $note['id'] . "' readonly>
-    <div class='col my-auto text-fit' ><a class='h5 text-center text-wrap mw-40'>" . $note['heading'] . "</a></div>
+    <div class='col my-auto text-fit' ><a class='h5 text-center text-wrap mw-40' href='study.php?topic=" . $_GET['topic'] . "&id=" . $note['id'] . "'>" . $note['heading'] . "</a></div>
      <div class='col-1'><button type='submit' name='delete' class='btn btn-danger btn-padded'>Delete</button></div>
 </form>    
 ";
