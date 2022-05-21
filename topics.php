@@ -102,7 +102,7 @@ $flashcards = $packagesWithoutNoteQuery->fetchAll(PDO::FETCH_ASSOC);
 </nav>
 
 <main class="content">
-    <form method="post" class="my-3" action="">
+    <form method="post" class="my-3">
         <div class="row align-items-center justify-content-center">
             <div class="col-6 col-sm-6 col-md-4 col-lg-3">
                 <input type="text" id="text" name="topic" maxlength="255" minlength="1" class="form-control form-control-lg "
@@ -157,10 +157,10 @@ $flashcards = $packagesWithoutNoteQuery->fetchAll(PDO::FETCH_ASSOC);
         foreach ($flashcards as $topic) {
             echo "
 <div class='d-flex flex-row align-items-center justify-content-center'><p class='h4 break-word'>" . htmlspecialchars($topic['name']) . "</p></div>
-<form class='row my-3 d-flex'  method='post' action=''>
-    <input type='hidden' name='id' value='" . htmlspecialchars($topic['id']) . "' readonly>
-    <div class='col-3 d-flex flex-row align-items-center justify-content-center'><a type='submit' class='btn btn-secondary btn-padded' href='./notes?topic=" . htmlspecialchars($topic['name']) . "'>Notes</a></div>
-    <div class='col-3 d-flex flex-row align-items-center justify-content-center'><a type='submit' href='./flashcards?topic=" . htmlspecialchars($topic['name']) . "' class='btn btn-success btn-padded'>Flashcards</a></div>
+<form class='row my-3 d-flex'  method='post'>
+    <input type='hidden' name='id' value='" . htmlspecialchars($topic['id']) . "'>
+    <div class='col-3 d-flex flex-row align-items-center justify-content-center'><a class='btn btn-secondary btn-padded' href='./notes?topic=" . htmlspecialchars($topic['name']) . "'>Notes</a></div>
+    <div class='col-3 d-flex flex-row align-items-center justify-content-center'><a href='./flashcards?topic=" . htmlspecialchars($topic['name']) . "' class='btn btn-success btn-padded'>Flashcards</a></div>
     <div class='col-3 d-flex flex-row align-items-center justify-content-center'><button type='submit' name='archive' class='btn btn-info btn-padded'>Archive</button></div>
     <div class='col-3 d-flex flex-row align-items-center justify-content-center'><button type='submit' name='delete' class='btn btn-danger btn-padded'>Delete</button></div>
 </form>    

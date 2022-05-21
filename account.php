@@ -85,7 +85,7 @@ if(isset($_POST['password1'])){
 
 <main class="content left-padded">
 
-    <form method="post" action="" class="gapped-form change-account-form">
+    <form method="post" class="gapped-form change-account-form">
         <h2>Change email</h2>
         <div class="form-group col-lg-4 col-8">
             <label for="email">Email</label>
@@ -108,14 +108,14 @@ if(isset($_POST['password1'])){
                 } elseif($signedWithFb){
                     echo '<h3 class="text-danger" id="resultAreaEmail">Your account uses facebook, email cannot be changed</h3>';
                 } else {
-                    echo '<h3 class="text-danger" id="resultAreaEmail"></h3>';
+                    echo '<h3 class="text-danger" id="resultAreaEmail">&nbsp;</h3>';
                 }
                 ?>
             </div>
         </div>
     </form>
 
-    <form method="post" action="" class="gapped-form change-account-form">
+    <form method="post" class="gapped-form change-account-form">
         <h2><?= $noPasswordIfSignedWithFb? 'Set up new password' : 'Change password' ?></h2>
         <div class="form-group col-lg-4 col-8">
             <label for="password1">New password</label>

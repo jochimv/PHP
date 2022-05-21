@@ -83,11 +83,11 @@ $flashcards = $flashcardQuery->fetchAll(PDO::FETCH_ASSOC);
     } else {
         foreach ($flashcards as $flashcard) {
             echo "
-<form class='row my-3 d-flex' method='post' action='' >
-    <input type='hidden' name='id' value='" . htmlspecialchars($flashcard['id']) . "' readonly>
+<form class='row my-3 d-flex' method='post' >
+    <input type='hidden' name='id' value='" . htmlspecialchars($flashcard['id']) . "'>
     <div class='col my-auto text-fit' ><p class='h5 text-center text-wrap mw-40 break-word'>" . htmlspecialchars($flashcard['question']) . "</p></div>
     <div class='col my-auto text-fit'><p class='h5 text-center text-wrap break-word'>" . htmlspecialchars($flashcard['answer']) . "</p></div>
-    <div class='col-2'><a type='button' class='btn btn-info btn-padded' href='./adjust.php?id=" . htmlspecialchars($flashcard['id']) . "' >Adjust</a></div>
+    <div class='col-2'><a class='btn btn-info btn-padded' href='./adjust.php?id=" . htmlspecialchars($flashcard['id']) . "' >Adjust</a></div>
      <div class='col-2'><button type='submit' name='delete' class='btn btn-danger btn-padded ml-s'>Delete</button></div>
 </form>    
 ";

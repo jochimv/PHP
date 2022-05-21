@@ -86,8 +86,8 @@ if (isset($_GET['id'])){
 
 
 
-    <form method="post" action="" class="gapped-form">
-        <input type="hidden" value="<?=htmlspecialchars($_GET['id'])?>" name="id" readonly>
+    <form method="post" class="gapped-form">
+        <input type="hidden" value="<?=htmlspecialchars($_GET['id'])?>" name="id">
         <div class="form-group">
             <label for="question">Question</label>
             <input type="text" class="form-control" id="question" name="question" required

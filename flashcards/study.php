@@ -67,7 +67,7 @@ $flashcards = $flashcardQuery->fetchAll(PDO::FETCH_ASSOC);
 
         echo '<div id="carouselExampleControls" style="height: 500px" class="carousel slide mx-auto" data-bs-ride="carousel" data-bs-interval="false" >
   <div class="carousel-inner h-100">
-  <div class="carousel-item active bg-secondary"><div class="d-flex flex-column h-100 align-items-center justify-content-center"><h2 class="text-white"><u>Flashcards</u><h3><h3 class="text-white break-word"> ' .
+  <div class="carousel-item active bg-secondary"><div class="d-flex flex-column h-100 align-items-center justify-content-center"><h2 class="text-white"><u>Flashcards</u><h3 class="text-white break-word"> ' .
             htmlspecialchars($_GET['topic']) .
             '</h3></div></div>
   ';

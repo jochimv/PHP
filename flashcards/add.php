@@ -73,7 +73,7 @@ if (!empty($_POST)) {
     </div>
 
 
-    <form method="post" action="" class="gapped-form">
+    <form method="post" class="gapped-form">
         <div class="form-group">
             <label for="question">Add a question</label>
             <input type="text" class="form-control" id="question" name="question" required maxlength="255"

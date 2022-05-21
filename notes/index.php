@@ -87,11 +87,11 @@ if ($allNotesQuery->rowCount() > 0) {
 </div>";
     } else {
         foreach ($notes as $note) {
-            echo "<form class='my-3 d-flex flex-row align-items-center justify-content-center' method='post' action='' >
-    <input type='hidden' name='id' value='" .htmlspecialchars($note['id']) . "' readonly>
+            echo "<form class='my-3 d-flex flex-row align-items-center justify-content-center' method='post' >
+    <input type='hidden' name='id' value='" .htmlspecialchars($note['id']) . "'>
     <div class='col-4 my-auto text-fit d-flex align-items-center justify-content-center' ><a class='h5 text-center text-wrap mw-40 break-word' href='study.php?topic=" . htmlspecialchars($_GET['topic']) . "&id=" . htmlspecialchars($note['id']) . "'>" . htmlspecialchars($note['heading']) . "</a></div>
      <div class='col-4 d-flex align-items-center justify-content-center'><button type='submit' name='delete' class='btn btn-danger btn-padded'>Delete everywhere</button></div>
-     <div class='col-4 d-flex align-items-center justify-content-center'><a type='submit' href='package_manager.php?topic=" .htmlspecialchars($_GET['topic'])."&id=". htmlspecialchars($note['id']) . "' class='btn btn-info btn-padded ml-s'>Adjust packages</a></div>
+     <div class='col-4 d-flex align-items-center justify-content-center'><a href='package_manager.php?topic=" .htmlspecialchars($_GET['topic'])."&id=". htmlspecialchars($note['id']) . "' class='btn btn-info btn-padded ml-s'>Adjust packages</a></div>
 </form>    
 ";
         }

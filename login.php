@@ -67,7 +67,7 @@ if (!empty($_POST)) {
                  class="img-fluid" alt="Sample image">
         </div>
         <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-            <form method="post" action="">
+            <form method="post">
 
                 <div class="form-outline mb-3 px-5 px-md-0">
                     <input type="email" id="email" name="email" class="form-control form-control-lg "

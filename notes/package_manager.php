@@ -104,13 +104,13 @@ $packagesWithoutNote = $packagesWithoutNoteQuery->fetchAll(PDO::FETCH_ASSOC);
             <a class='btn btn-secondary btn-padded' href="./index.php?topic=<?= htmlspecialchars($_GET['topic']) ?>">Back</a>
         </div>
     </div>
-    <form class='my-3 d-flex flex-row align-items-center justify-content-center' method='post' action=''>
+    <form class='my-3 d-flex flex-row align-items-center justify-content-center' method='post' >
         <?php
 
         foreach ($noteInPackages as $noteInPackage) {
 
-            echo "<form class='my-3 d-flex flex-row align-items-center justify-content-center' method='post' action='' >
-    <input type='hidden' name='id' value='" . htmlspecialchars($noteInPackage['id']) . "' readonly>
+            echo "<form class='my-3 d-flex flex-row align-items-center justify-content-center' method='post' >
+    <input type='hidden' name='id' value='" . htmlspecialchars($noteInPackage['id']) . "'>
     <div class='col-4 my-auto text-fit d-flex align-items-center justify-content-center' ><div class='h5 text-center text-wrap mw-40 break-word'>" . htmlspecialchars($noteInPackage['name']) . "</div></div>
      <div class='col-4 d-flex align-items-center justify-content-center'><button type='submit' class='btn btn-padded btn-danger'" . (count($noteInPackages) == 1? "name='delete'>Delete" : "name='remove'>Remove")  . "</button></div>
 </form>    
@@ -118,8 +118,8 @@ $packagesWithoutNote = $packagesWithoutNoteQuery->fetchAll(PDO::FETCH_ASSOC);
 
         }
         foreach ($packagesWithoutNote as $package) {
-            echo "<form class='my-3 d-flex flex-row align-items-center justify-content-center' method='post' action='' >
-    <input type='hidden' name='id' value='" . htmlspecialchars($package['id']) . "' readonly>
+            echo "<form class='my-3 d-flex flex-row align-items-center justify-content-center' method='post'  >
+    <input type='hidden' name='id' value='" . htmlspecialchars($package['id']) . "'>
     <div class='col-4 my-auto text-fit d-flex align-items-center justify-content-center' ><div class='h5 text-center text-wrap mw-40 break-word'>" . htmlspecialchars($package['name']) . "</div></div>
      <div class='col-4 d-flex align-items-center justify-content-center'><button type='submit' name='add' class='btn btn-padded btn-success'>Add</button></div>
     </form>";

@@ -76,8 +76,8 @@ $topics = $topicQuery->fetchAll(PDO::FETCH_ASSOC);
     } else {
         foreach ($topics as $topic) {
             echo "
-<form class='row my-3 d-flex flex-row align-items-center justify-content-center'  method='post' action=''>
-    <input type='hidden' name='id' value='" . htmlspecialchars($topic['id']) . "' readonly>
+<form class='row my-3 d-flex flex-row align-items-center justify-content-center'  method='post'>
+    <input type='hidden' name='id' value='" . htmlspecialchars($topic['id']) . "'>
     <div class='col-2 my-auto'><p class='h4 text-center break-word'>" . htmlspecialchars($topic['name']) . "</p></div>
     <div class='col-1 '><button type='submit' name='unarchive' class='btn btn-secondary btn-padded'>Unarchive</button></div>
 </form>    

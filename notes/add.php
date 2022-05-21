@@ -48,10 +48,9 @@ if (!empty($_POST['heading'])) {
     <link rel="stylesheet" href="../css/inner.css">
 
     <!-- include libraries(jQuery, bootstrap) -->
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script  src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"/>
-    <script type="text/javascript"
-            src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- include summernote css/js-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs5.min.css" rel="stylesheet">
@@ -91,7 +90,7 @@ if (!empty($_POST['heading'])) {
         ?>
     </div>
 
-    <form method="post" action="">
+    <form method="post" >
         <div class="d-flex flex-column mb-4">
             <label for="heading">Heading</label>
             <input type="text" name="heading" placeholder="PHP lecture #1" id="heading" maxlength="255"
