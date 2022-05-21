@@ -29,6 +29,18 @@ html,body{
     word-wrap: break-word;
 }
 
+.break-word{
+    word-wrap: break-word;
+    max-width: 100%;
+}
+
+.max-50{
+    max-width: 50%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: medium;
+}
+
 .navbar-brand{
     margin-left: 30px;
 }
