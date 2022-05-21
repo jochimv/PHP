@@ -110,7 +110,7 @@ $packagesWithoutNote = $packagesWithoutNoteQuery->fetchAll(PDO::FETCH_ASSOC);
 <main class="content">
 
     <div class="d-flex flex-row align-items-center justify-content-center">
-        <div class="col-4 text-center h5 my-3"><?= htmlspecialchars($noteInPackages[0]['heading']) ?> - packages</div>
+        <div class="col-4 text-center h5 my-3 break-word"><?= htmlspecialchars($noteInPackages[0]['heading']) ?> - packages</div>
         <div class="col-4 text-center h5 my-3 text-success"><?= $updatedSuccessfully ? 'Packages updated!' : '&nbsp;' ?></div>
         <div class="col-2 d-flex align-items-center justify-content-center">
             <a class='btn btn-secondary btn-padded' href="./index.php?topic=<?= htmlspecialchars($_GET['topic']) ?>">Back</a>
@@ -123,7 +123,7 @@ $packagesWithoutNote = $packagesWithoutNoteQuery->fetchAll(PDO::FETCH_ASSOC);
 
             echo "<form class='my-3 d-flex flex-row align-items-center justify-content-center' method='post' action='' >
     <input type='hidden' name='id' value='" . htmlspecialchars($noteInPackage['id']) . "' readonly>
-    <div class='col-4 my-auto text-fit d-flex align-items-center justify-content-center' ><div class='h5 text-center text-wrap mw-40'>" . htmlspecialchars($noteInPackage['name']) . "</div></div>
+    <div class='col-4 my-auto text-fit d-flex align-items-center justify-content-center' ><div class='h5 text-center text-wrap mw-40 break-word'>" . htmlspecialchars($noteInPackage['name']) . "</div></div>
      <div class='col-4 d-flex align-items-center justify-content-center'><button type='submit' class='btn btn-padded btn-danger'" . (count($noteInPackages) == 1? "name='delete'>Delete" : "name='remove'>Remove")  . "</button></div>
 </form>    
 ";
@@ -132,7 +132,7 @@ $packagesWithoutNote = $packagesWithoutNoteQuery->fetchAll(PDO::FETCH_ASSOC);
         foreach ($packagesWithoutNote as $package) {
             echo "<form class='my-3 d-flex flex-row align-items-center justify-content-center' method='post' action='' >
     <input type='hidden' name='id' value='" . htmlspecialchars($package['id']) . "' readonly>
-    <div class='col-4 my-auto text-fit d-flex align-items-center justify-content-center' ><div class='h5 text-center text-wrap mw-40'>" . htmlspecialchars($package['name']) . "</div></div>
+    <div class='col-4 my-auto text-fit d-flex align-items-center justify-content-center' ><div class='h5 text-center text-wrap mw-40 break-word'>" . htmlspecialchars($package['name']) . "</div></div>
      <div class='col-4 d-flex align-items-center justify-content-center'><button type='submit' name='add' class='btn btn-padded btn-success'>Add</button></div>
     </form>";
         }

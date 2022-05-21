@@ -102,7 +102,7 @@ if (isset($_GET['id']) && isset($_GET['topic'])) {
 <main class="content">
 
     <div class="d-flex flex-row align-items-center justify-content-center">
-        <div class="col-6 h5"><?= htmlspecialchars($_GET['topic']) ?> - update a note</div>
+        <div class="col-6 h5 break-word"><?= htmlspecialchars($_GET['topic']) ?> - update a note</div>
         <?php if ($updatedSuccessfully) {
             echo '<div class="col-6 text-success h5" id="resultArea">Updated successfully!</div>';
         } else if ($noteAlreadyExists) {
@@ -118,7 +118,7 @@ if (isset($_GET['id']) && isset($_GET['topic'])) {
         <input type="hidden" name="id" value="<?= htmlspecialchars($note['id'])?>">
         <div class="d-flex flex-column mb-4">
             <label for="heading">Heading</label>
-            <input type="text" name="heading" placeholder="PHP lecture #1" id="heading"
+            <input type="text" name="heading" placeholder="PHP lecture #1" id="heading" maxlength="255"
                    value="<?= htmlspecialchars($note['heading']) ?>">
         </div>
         <textarea id="summernote" name="content" placeholder="Some fancy text"></textarea>

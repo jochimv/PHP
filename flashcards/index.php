@@ -36,7 +36,7 @@ $id = getTopicId();
 
 <main class="content">
     <div class="d-flex flex-row align-items-center justify-content-center">
-        <div class="row text-center h5 my-3"><?= htmlspecialchars($_GET['topic']) ?></div>
+        <div class="row text-center h5 my-3 break-word"><?= htmlspecialchars($_GET['topic']) ?></div>
 </div>
 
     <div class='row my-3 d-flex align-items-center justify-content-center' >

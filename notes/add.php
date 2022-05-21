@@ -78,7 +78,7 @@ if (!empty($_POST['heading'])) {
 
 <main class="content">
     <div class="d-flex flex-row align-items-center justify-content-center">
-        <div class="col-6 h5"><?= htmlspecialchars($_GET['topic']) ?> - add a note</div>
+        <div class="col-6 h5 break-word"><?= htmlspecialchars($_GET['topic']) ?> - add a note</div>
         <?php if ($addedSuccessfully) {
             echo '<div class="col-6 text-success h5" id="resultArea">New note added!</div>';
         } else if ($noteAlreadyExists) {
@@ -92,7 +92,7 @@ if (!empty($_POST['heading'])) {
     <form method="post" action="">
         <div class="d-flex flex-column mb-4">
             <label for="heading">Heading</label>
-            <input type="text" name="heading" placeholder="PHP lecture #1" id="heading"
+            <input type="text" name="heading" placeholder="PHP lecture #1" id="heading" maxlength="255"
                    value="<?= $addedSuccessfully ? '' : (htmlspecialchars($_POST['heading'] ?? '') ) ?>">
         </div>
         <textarea id="summernote" name="content" placeholder="Some fancy text"></textarea>

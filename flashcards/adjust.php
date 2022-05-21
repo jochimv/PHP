@@ -18,11 +18,7 @@ if(isset($_POST['id'])){
     } else {
         header('Location: ../topics.php');
     }
-} else {
-    echo '$_post id not set';
-    var_dump($_POST);
 }
-
 
 $topic = null;
 if (isset($_GET['id'])){
@@ -94,12 +90,12 @@ if (isset($_GET['id'])){
         <div class="form-group">
             <label for="question">Question</label>
             <input type="text" class="form-control" id="question" name="question" required
-                   placeholder="What is Forrest Gump’s email password?" value="<?=htmlspecialchars($topic['question']) ?>">
+                   placeholder="What is Forrest Gump’s email password?" maxlength="255" value="<?=htmlspecialchars($topic['question']) ?>">
         </div>
 
         <div class="form-group">
             <label for="answer">Answer</label>
-            <textarea class="form-control" id="answer" name="answer" required placeholder="1forrest1"
+            <textarea class="form-control" id="answer" name="answer" required maxlength="255" placeholder="1forrest1"
                       rows="3"><?=htmlspecialchars($topic['answer'])?></textarea>
         </div>
 

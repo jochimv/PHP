@@ -60,7 +60,7 @@ $flashcards = $flashcardQuery->fetchAll(PDO::FETCH_ASSOC);
 <main class="content">
     <div class="d-flex flex-row align-items-center justify-content-center">
         <div class="col-4 d-flex align-items-center justify-content-center ">
-            <div class="row text-center h5 my-3"><?= htmlspecialchars($_GET['topic']) ?> - manage flashcards</div>
+            <div class="row text-center h5 my-3 break-word"><?= htmlspecialchars($_GET['topic']) ?> - manage flashcards</div>
         </div>
         <div class="col-4 d-flex align-items-center justify-content-center ">
             <div class="row text-center text-success h5 my-3"><?php echo $deletedSuccessfully ? 'Flashcard deleted successfully!' : '&nbsp;' ?></div>
@@ -84,8 +84,8 @@ $flashcards = $flashcardQuery->fetchAll(PDO::FETCH_ASSOC);
             echo "
 <form class='row my-3 d-flex' method='post' action='' >
     <input type='hidden' name='id' value='" . htmlspecialchars($flashcard['id']) . "' readonly>
-    <div class='col my-auto text-fit' ><p class='h5 text-center text-wrap mw-40'>" . htmlspecialchars($flashcard['question']) . "</p></div>
-    <div class='col my-auto text-fit'><p class='h5 text-center text-wrap'>" . htmlspecialchars($flashcard['answer']) . "</p></div>
+    <div class='col my-auto text-fit' ><p class='h5 text-center text-wrap mw-40 break-word'>" . htmlspecialchars($flashcard['question']) . "</p></div>
+    <div class='col my-auto text-fit'><p class='h5 text-center text-wrap break-word'>" . htmlspecialchars($flashcard['answer']) . "</p></div>
     <div class='col-2'><a type='button' class='btn btn-info btn-padded' href='./adjust.php?id=" . htmlspecialchars($flashcard['id']) . "' >Adjust</a></div>
      <div class='col-2'><button type='submit' name='delete' class='btn btn-danger btn-padded'>Delete</button></div>
 </form>    

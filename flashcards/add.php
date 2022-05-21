@@ -60,13 +60,13 @@ if (!empty($_POST)) {
 
 <main class="content">
     <div class="d-flex flex-row align-items-center justify-content-center">
-        <div class="col-6 h5"><?= htmlspecialchars($_GET['topic']) ?> - add a flashcard</div>
+        <div class="col-6 h5 break-word"><?= htmlspecialchars($_GET['topic']) ?> - add a flashcard</div>
         <?php if ($addedSuccessfully) {
-            echo '<div class="col-6 text-success h5">New flashcard added!</div>';
+            echo '<div class="col-6 text-success h5" id="resultArea">New flashcard added!</div>';
         } else if ($flashcardAlreadyExists) {
-            echo '<div class="col-6 text-danger h5">Flashcard with this name already exists</div>';
+            echo '<div class="col-6 text-danger h5" id="resultArea">Flashcard with this name already exists</div>';
         } else {
-            echo '<div class="col-6 text-danger h5">&nbsp;</div>';
+            echo '<div class="col-6 text-danger h5" id="resultArea">&nbsp;</div>';
         }
         ?>
     </div>
@@ -75,19 +75,19 @@ if (!empty($_POST)) {
     <form method="post" action="" class="gapped-form">
         <div class="form-group">
             <label for="question">Add a question</label>
-            <input type="text" class="form-control" id="question" name="question" required
+            <input type="text" class="form-control" id="question" name="question" required maxlength="255"
                    placeholder="What is Forrest Gump’s email password?">
         </div>
 
         <div class="form-group">
             <label for="answer">Add an answer</label>
-            <textarea class="form-control" id="answer" name="answer" required placeholder="1forrest1"
+            <textarea class="form-control" id="answer" name="answer" required placeholder="1forrest1" maxlength="255"
                       rows="3"></textarea>
         </div>
 
         <div class="col-6 row">
             <div class="col-4">
-            <button class='btn btn-primary btn-padded'>Add</button>
+            <button class='btn btn-primary btn-padded' id="add">Add</button>
             </div>
             <div class="col-4">
                 <a class='btn btn-secondary btn-padded' href="./index.php?topic=<?=htmlspecialchars($_GET['topic'])?>">Back</a>

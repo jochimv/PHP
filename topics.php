@@ -83,7 +83,7 @@ $flashcards = $packagesWithoutNoteQuery->fetchAll(PDO::FETCH_ASSOC);
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/inner.css">
-    <script src="./js/topics.js"></script>
+
 </head>
 
 <body>
@@ -104,7 +104,7 @@ $flashcards = $packagesWithoutNoteQuery->fetchAll(PDO::FETCH_ASSOC);
     <form method="post" class="my-3" action="">
         <div class="row align-items-center justify-content-center">
             <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-                <input type="text" id="text" name="topic" class="form-control form-control-lg "
+                <input type="text" id="text" name="topic" maxlength="255" minlength="1" class="form-control form-control-lg "
                        placeholder="Add a new topic" <?php if ($topicExists) {
                     echo 'value="' . $_POST['topic'] . '"';
                 } ?>
