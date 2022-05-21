@@ -1,0 +1,12 @@
+{
+    "name": "vjochim/app",
+    "authors": [
+        {
+            "name": "Václav Jochim",
+            "email": "VJochim@cpas.cz"
+        }
+    ],
+    "require": {
+        "facebook/graph-sdk": "^5.1"
+    }
+}

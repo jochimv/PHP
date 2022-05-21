@@ -1,6 +1,7 @@
 <?php
-
+error_reporting(E_ALL);
 require_once 'utils/user.php';
+require_once 'utils/facebook.php';
 
 if (!empty($_SESSION['user_id'])) {
     //uživatel už je přihlášený, nemá smysl, aby se přihlašoval znovu
@@ -8,6 +9,11 @@ if (!empty($_SESSION['user_id'])) {
     exit();
 }
 
+$fbHelper = $fb->getRedirectLoginHelper();
+$permissions=['email'];
+$callbackUrl = htmlspecialchars('https://eso.vse.cz/~jocv00/app/fb-callback.php');
+
+$fbLoginUrl= $fbHelper->getLoginUrl($callbackUrl,$permissions);
 
 $invalidCredentials = false;
 if (!empty($_POST)) {
@@ -91,6 +97,8 @@ if (!empty($_POST)) {
                 }
                 ?>
             </form>
+
+            <a href="<?=$fbLoginUrl?>" class="btn btn-padded btn-primary">Přihlásit se přes FB</a>
         </div>
     </div>
 </div>
