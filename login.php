@@ -1,5 +1,5 @@
 <?php
-error_reporting(E_ALL);
+error_reporting(E_ERROR | E_PARSE);
 require_once 'utils/user.php';
 require_once 'utils/facebook.php';
 
@@ -10,10 +10,10 @@ if (!empty($_SESSION['user_id'])) {
 }
 
 $fbHelper = $fb->getRedirectLoginHelper();
-$permissions=['email'];
+$permissions = ['email'];
 $callbackUrl = htmlspecialchars('https://eso.vse.cz/~jocv00/app/fb-callback.php');
 
-$fbLoginUrl= $fbHelper->getLoginUrl($callbackUrl,$permissions);
+$fbLoginUrl = $fbHelper->getLoginUrl($callbackUrl, $permissions);
 
 $invalidCredentials = false;
 if (!empty($_POST)) {
@@ -52,7 +52,7 @@ if (!empty($_POST)) {
     <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
     <link rel="stylesheet" href="css/outer.css">
     <script src="js/login.js"></script>
 </head>
@@ -81,10 +81,18 @@ if (!empty($_POST)) {
                 </div>
 
                 <div class="text-center text-sm-start mt-4 mb-4 row">
-                    <div class="col-6 centered">
+                    <div class="col-5 centered">
                         <button id="logIn" class="btn btn-primary btn-lg btn-padded">Log in</button>
                     </div>
-                    <div class="col-6 centered">
+                    <div class="col-2 centered">
+                        <a href="<?= $fbLoginUrl ?>">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor"
+                                 class="bi bi-facebook" viewBox="0 0 16 16">
+                                <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"/>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="col-5 centered">
                         <div class="centered flex-column">
                             <p class="small fw-bold mt-2 mb-0">Don't have an account?</p>
                             <a href="./signup.php" class="link-danger">Sign up</a>
@@ -98,7 +106,6 @@ if (!empty($_POST)) {
                 ?>
             </form>
 
-            <a href="<?=$fbLoginUrl?>" class="btn btn-padded btn-primary">Přihlásit se přes FB</a>
         </div>
     </div>
 </div>

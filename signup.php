@@ -1,12 +1,20 @@
 <?php
+error_reporting(E_ERROR | E_PARSE);
 //načteme připojení k databázi a inicializujeme session
 require_once 'utils/user.php';
+require_once 'utils/facebook.php';
 
 if (!empty($_SESSION['user_id'])) {
     //uživatel už je přihlášený, nemá smysl, aby se registroval
     header('Location: topics.php');
     exit();
 }
+
+$fbHelper = $fb->getRedirectLoginHelper();
+$permissions = ['email'];
+$callbackUrl = htmlspecialchars('https://eso.vse.cz/~jocv00/app/fb-callback.php');
+
+$fbLoginUrl = $fbHelper->getLoginUrl($callbackUrl, $permissions);
 
 
 if (!empty($_POST)) {
@@ -25,7 +33,7 @@ if (!empty($_POST)) {
     if (!$mailExists) {
         $password = password_hash($_POST['password1'], PASSWORD_DEFAULT);
 
-        $query = $db->prepare('INSERT INTO User_app (email, password,admin) VALUES (:email, :password, FALSE);');
+        $query = $db->prepare('INSERT INTO User_app (email, password) VALUES (:email, :password);');
         $query->execute([
             ':email' => $email,
             ':password' => $password,
@@ -90,11 +98,19 @@ if (!empty($_POST)) {
                 </div>
 
                 <div class="text-center mt-4 pt-2 row">
-                    <div class="col-6">
+                    <div class="col-5 centered">
                         <button class="btn btn-primary btn-lg btn-padded" id="signUp">Sign up</button>
                     </div>
-                    <div class="col-6">
-                        <p class="small fw-bold mt-2 pt-1 mb-0">Already have an account?</p>
+                    <div class="col-2 centered">
+                        <a href="<?= $fbLoginUrl ?>">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor"
+                                 class="bi bi-facebook" viewBox="0 0 16 16">
+                                <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"/>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="col-5 centered d-flex flex-column">
+                        <p class="small fw-bold mb-0">Already have an account?</p>
                         <a href="./login.php"
                            class="link-danger">Log
                             in</a>
