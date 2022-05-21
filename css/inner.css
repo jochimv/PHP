@@ -9,9 +9,8 @@ html,body{
 
 .content{
     margin-top: 20px;
-    padding-bottom: 40px;
+    padding: 0px 30px 40px 30px;
 }
-
 
 .gapped-form{
     display: flex;
@@ -55,13 +54,12 @@ html,body{
 .carousel-item {
     transition-duration: 0.3s;
 }
-main{
-    padding-left: 30px;
-    padding-right: 30px;
-}
 
 .ml-s{
     margin-left: 15px;
+}
+.ml-m{
+    margin-left: 40px;
 }
 
 @media screen and (max-width: 624px){

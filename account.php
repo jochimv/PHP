@@ -78,7 +78,7 @@ if (isset($_POST['password1'])) {
     </div>
 </nav>
 
-<main class="content left-padded">
+<main class="content">
 
     <form method="post" class="gapped-form change-account-form">
         <h2>Change email</h2>

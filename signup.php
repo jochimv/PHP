@@ -72,20 +72,20 @@ if (!empty($_POST)) {
         <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
             <form method="post">
 
-                <div class="form-outline mb-3 px-5 px-md-0">
+                <div class="form-outline mb-3">
                     <input type="email" id="email" class="form-control form-control-lg " name="email"
                            placeholder="Enter a valid email address"/>
                     <label class="form-label" for="email">Email address</label>
                 </div>
 
-                <div class="form-outline mb-3 px-5 px-md-0">
+                <div class="form-outline mb-3">
                     <input type="password" pattern=".{6,32}" title="6 to 32 characters" id="password1"
                            class="form-control form-control-lg" name="password1" placeholder="Enter password"/>
                     <label class="form-label" for="password1">Password</label>
                 </div>
 
 
-                <div class="form-outline mb-3 px-5 px-md-0">
+                <div class="form-outline mb-3">
                     <input type="password" pattern=".{6,32}" title="6 to 32 characters" id="password2"
                            class="form-control form-control-lg" name="password2" placeholder="Enter password"/>
                     <label class="form-label" for="password2">Repeat password</label>

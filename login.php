@@ -66,18 +66,23 @@ if (!empty($_POST)) {
         <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
             <form method="post">
 
-                <div class="form-outline mb-3 px-5 px-md-0">
+                <div class="form-outline mb-3">
                     <input type="email" id="email" name="email" class="form-control form-control-lg "
                            placeholder="Enter a valid email address"/>
                     <label class="form-label" for="email">Email address</label>
                 </div>
 
-                <div class="form-outline mb-3 px-5 px-md-0">
+                <div class="form-outline mb-3">
                     <input type="password" id="password" name="password" class="form-control form-control-lg"
                            placeholder="Enter password"/>
                     <label class="form-label" for="password">Password</label>
                 </div>
 
+                <?php
+                if ($invalidCredentials) {
+                    echo '<p class="text-center text-danger h5 w-100">Invalid credentials</p>';
+                }
+                ?>
                 <div class="text-center text-sm-start mt-4 mb-4 row">
                     <div class="col-5 centered">
                         <button id="logIn" class="btn btn-primary btn-lg btn-padded">Log in</button>
@@ -92,16 +97,12 @@ if (!empty($_POST)) {
                     </div>
                     <div class="col-5 centered">
                         <div class="centered flex-column">
-                            <p class="small fw-bold mt-2 mb-0">Don't have an account?</p>
-                            <a href="./signup.php" class="link-danger">Sign up</a>
+                            <p class="small fw-bold mt-2 mb-0 text-center">Don't have an account?</p>
+                            <a href="./signup.php" class="link-danger text-center">Sign up</a>
                         </div>
                     </div>
                 </div>
-                <?php
-                if ($invalidCredentials) {
-                    echo '<p class="text-center text-danger h5 w-100">Invalid credentials</p>';
-                }
-                ?>
+
             </form>
 
         </div>

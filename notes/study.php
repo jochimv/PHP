@@ -124,7 +124,7 @@ if (isset($_GET['id']) && isset($_GET['topic'])) {
             <div class="col-2 mr-5">
                 <button class="btn btn-padded btn-success" id="addNote">Update</button>
             </div>
-            <div class="col-2">
+            <div class="col-2 ml-m">
                 <div class="col-4 d-flex align-items-center justify-content-center ">
                     <a class='btn btn-secondary btn-padded'
                        href="./index.php?topic=<?= htmlspecialchars($_GET['topic']) ?>">Back</a>
