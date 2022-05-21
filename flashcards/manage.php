@@ -51,8 +51,8 @@ $flashcards = $flashcardQuery->fetchAll(PDO::FETCH_ASSOC);
         <div class="navbar-nav ms-auto me-5">
             <a class="nav-item nav-link" href="../topics.php">Topics</a>
             <a class="nav-item nav-link" href="../archived.php">Archived topics</a>
-            <a class="nav-item nav-link" href="#">Pricing</a>
-            <a class="nav-item nav-link" href="./logout.php">Log out</a>
+            <a class="nav-item nav-link" href="../account.php">Account</a>
+            <a class="nav-item nav-link" href="../logout.php">Log out</a>
         </div>
     </div>
 </nav>
