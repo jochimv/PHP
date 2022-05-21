@@ -46,7 +46,7 @@ if (isset($_POST['add'])) {
         $updatedSuccessfully = true;
     }
 }
-
+/*
 $noteBelongsToUser = $db->prepare('SELECT * FROM Note INNER JOIN Topic_Note ON Note.id = Topic_Note.Note_id INNER JOIN Topic on Topic_Note.Topic_id = Topic.id WHERE Topic.User_id=:user_id AND Note.id=:id;');
 
 $noteBelongsToUser->execute([
@@ -57,20 +57,25 @@ $noteBelongsToUser->execute([
 
 if ($noteBelongsToUser->rowCount() === 0) {
     header('Location: ../topics.php');
-}
+}*/
 
 
-$getAllNotesQuery = $db->prepare('SELECT * FROM Note INNER JOIN Topic_Note ON Note.id = Topic_Note.Note_id INNER JOIN Topic ON Topic_Note.Topic_id = Topic.id WHERE Note.id=:id AND Topic_Note.Topic_id;');
+$getAllNotesQuery = $db->prepare('SELECT * FROM Note INNER JOIN Topic_Note ON Note.id = Topic_Note.Note_id INNER JOIN Topic ON Topic_Note.Topic_id = Topic.id WHERE Note.id=:id AND Topic.User_id=:user_id;');
 $getAllNotesQuery->execute([
-    ':id' => $_GET['id']
+    ':id' => $_GET['id'],
+    ':user_id' => $_SESSION['user_id']
 ]);
+
+if($getAllNotesQuery->rowCount() === 0){
+    header('Location: ../topics.php');
+}
 
 $noteInPackages = $getAllNotesQuery->fetchAll(PDO::FETCH_ASSOC);
 
 $notInQuery = createNotInQuery(extractIds($noteInPackages));
 $packagesWithoutNoteQuery = $db->prepare($notInQuery);
 
-$packagesWithoutNoteQuery->execute();
+$packagesWithoutNoteQuery->execute([':user_id' => $_SESSION['user_id']]);
 $packagesWithoutNote = $packagesWithoutNoteQuery->fetchAll(PDO::FETCH_ASSOC);
 
 ?>

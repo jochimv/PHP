@@ -32,7 +32,7 @@ function createNotInQuery($ids){
     if(empty($ids)){
         return 'SELECT * FROM Topic';
     }
-    $query = "SELECT * FROM Topic WHERE id NOT IN (";
+    $query = "SELECT * FROM Topic WHERE User_id=:user_id AND id NOT IN (";
     foreach ($ids as $id){
         $query = $query . $id . ',';
     }
