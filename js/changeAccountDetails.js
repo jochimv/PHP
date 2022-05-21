@@ -3,10 +3,8 @@ window.onload = () => {
     const email = document.getElementById('email');
     const password1 = document.getElementById('password1');
     const password2 = document.getElementById('password2');
-    const changeEmailButton = document.getElementById('changeEmail');
     const changePasswordButton = document.getElementById('changePassword');
 
-    const resultAreaEmail = document.getElementById('resultAreaEmail');
     const resultAreaPassword = document.getElementById('resultAreaPassword');
 
     const isPasswordValid = () => {
@@ -52,25 +50,11 @@ window.onload = () => {
             changePasswordButton.disabled = true;
         }
     }
-    const emailInputHandler = () => {
-        if (resultAreaEmail.classList.contains('text-success')) {
-            resultAreaEmail.classList.remove('text-success');
-            resultAreaEmail.classList.add('text-danger');
-            resultAreaEmail.innerText = '';
-        }
-
-        if (isEmailValid()) {
-            changeEmailButton.disabled = false;
-        } else {
-            resultAreaEmail.innerText = 'But that\'s not an email!';
-            changeEmailButton.disabled = true;
-        }
-    }
 
     password1.addEventListener('keyup', passwordInputHandler);
     password2.addEventListener('keyup', passwordInputHandler);
-    email.addEventListener('keyup', emailInputHandler);
+
 
     changePasswordButton.disabled = true;
-    changeEmailButton.disabled = true;
+
 }

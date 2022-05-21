@@ -158,10 +158,10 @@ $flashcards = $packagesWithoutNoteQuery->fetchAll(PDO::FETCH_ASSOC);
 <div class='d-flex flex-row align-items-center justify-content-center'><p class='h4 break-word'>" . htmlspecialchars($topic['name']) . "</p></div>
 <form class='row my-3 d-flex'  method='post' action=''>
     <input type='hidden' name='id' value='" . htmlspecialchars($topic['id']) . "' readonly>
-    <div class='col d-flex flex-row align-items-center justify-content-center'><a type='submit' class='btn btn-secondary btn-padded' href='./notes?topic=" . htmlspecialchars($topic['name']) . "'>Notes</a></div>
-    <div class='col d-flex flex-row align-items-center justify-content-center'><a type='submit' href='./flashcards?topic=" . htmlspecialchars($topic['name']) . "' class='btn btn-success btn-padded'>Flashcards</a></div>
-    <div class='col d-flex flex-row align-items-center justify-content-center'><button type='submit' name='archive' class='btn btn-info btn-padded'>Archive</button></div>
-    <div class='col d-flex flex-row align-items-center justify-content-center'><button type='submit' name='delete' class='btn btn-danger btn-padded'>Delete</button></div>
+    <div class='col-3 d-flex flex-row align-items-center justify-content-center'><a type='submit' class='btn btn-secondary btn-padded' href='./notes?topic=" . htmlspecialchars($topic['name']) . "'>Notes</a></div>
+    <div class='col-3 d-flex flex-row align-items-center justify-content-center'><a type='submit' href='./flashcards?topic=" . htmlspecialchars($topic['name']) . "' class='btn btn-success btn-padded'>Flashcards</a></div>
+    <div class='col-3 d-flex flex-row align-items-center justify-content-center'><button type='submit' name='archive' class='btn btn-info btn-padded'>Archive</button></div>
+    <div class='col-3 d-flex flex-row align-items-center justify-content-center'><button type='submit' name='delete' class='btn btn-danger btn-padded'>Delete</button></div>
 </form>    
 ";
         }

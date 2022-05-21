@@ -55,6 +55,14 @@ html,body{
 .carousel-item {
     transition-duration: 0.3s;
 }
+main{
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.ml-s{
+    margin-left: 15px;
+}
 
 @media screen and (max-width: 624px){
     .navbar-brand{

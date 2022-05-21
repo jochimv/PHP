@@ -69,11 +69,11 @@ if ($allNotesQuery->rowCount() > 0) {
 
 <main class="content">
     <div class="d-flex flex-row align-items-center justify-content-center">
-        <div class="col-4 text-center h5 my-3 break-word"><?= htmlspecialchars($_GET['topic']) ?> - notes</div>
-        <div class="col-4 text-center h5 my-3 text-success"><?= $deletedSuccesfully ? 'Note deleted!' : '&nbsp;' ?></div>
+        <div class="col-3 text-center h5 my-3 break-word"><?= htmlspecialchars($_GET['topic']) ?> - notes</div>
+        <div class="col-3 text-center h5 my-3 text-success"><?= $deletedSuccesfully ? 'Note deleted!' : '&nbsp;' ?></div>
         <div class='col-2 d-flex align-items-center justify-content-center '><a
                     href='./add.php?topic=<?= htmlspecialchars($_GET['topic']) ?>' class='btn btn-success btn-padded'>Add</a></div>
-        <div class="col-2 d-flex align-items-center justify-content-center">
+        <div class="col-2 d-flex align-items-center justify-content-center ml-s">
             <a class='btn btn-secondary btn-padded' href="../topics.php">Back</a>
         </div>
     </div>
@@ -90,7 +90,7 @@ if ($allNotesQuery->rowCount() > 0) {
     <input type='hidden' name='id' value='" .htmlspecialchars($note['id']) . "' readonly>
     <div class='col-4 my-auto text-fit d-flex align-items-center justify-content-center' ><a class='h5 text-center text-wrap mw-40 break-word' href='study.php?topic=" . htmlspecialchars($_GET['topic']) . "&id=" . htmlspecialchars($note['id']) . "'>" . htmlspecialchars($note['heading']) . "</a></div>
      <div class='col-4 d-flex align-items-center justify-content-center'><button type='submit' name='delete' class='btn btn-danger btn-padded'>Delete everywhere</button></div>
-     <div class='col-4 d-flex align-items-center justify-content-center'><a type='submit' href='package_manager.php?topic=" .htmlspecialchars($_GET['topic'])."&id=". htmlspecialchars($note['id']) . "' class='btn btn-info btn-padded'>Adjust packages</a></div>
+     <div class='col-4 d-flex align-items-center justify-content-center'><a type='submit' href='package_manager.php?topic=" .htmlspecialchars($_GET['topic'])."&id=". htmlspecialchars($note['id']) . "' class='btn btn-info btn-padded ml-s'>Adjust packages</a></div>
 </form>    
 ";
         }

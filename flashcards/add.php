@@ -90,7 +90,7 @@ if (!empty($_POST)) {
             <button class='btn btn-primary btn-padded' id="add">Add</button>
             </div>
             <div class="col-4">
-                <a class='btn btn-secondary btn-padded' href="./index.php?topic=<?=htmlspecialchars($_GET['topic'])?>">Back</a>
+                <a class='btn btn-secondary btn-padded ml-s' href="./index.php?topic=<?=htmlspecialchars($_GET['topic'])?>">Back</a>
             </div>
 
         </div>

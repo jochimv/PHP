@@ -4,6 +4,22 @@ require_once 'utils/user.php';
 $emailChangedSuccessfully = false;
 $passwordChangedSuccessfully = false;
 $mailExists = false;
+$query = $db->prepare('SELECT * FROM User_app WHERE email=:email LIMIT 1');
+$query->execute([':email' => $_SESSION['user_email']]);
+$user = $query->fetch(PDO::FETCH_ASSOC);
+
+$signedWithFb = false;
+$noPasswordIfSignedWithFb = false;
+if(isset($user['facebook_id'])){
+    $signedWithFb = true;
+}
+
+if ($signedWithFb && empty($user['password'])){
+    $noPasswordIfSignedWithFb = true;
+}
+
+
+
 if(isset($_POST['password1'])){
     $password = password_hash($_POST['password1'], PASSWORD_DEFAULT);
 
@@ -12,13 +28,20 @@ if(isset($_POST['password1'])){
     $stmt->execute([$password,$_SESSION['user_id']]);
     $passwordChangedSuccessfully = true;
 } else if (isset($_POST['email'])){
+
     $mailQuery = $db->prepare('SELECT * FROM User_app WHERE email=:email LIMIT 1;');
     $mailQuery->execute([
         ':email' => $_POST['email']
     ]);
+
+    //jestliže je tento email už zabraný
     if ($mailQuery->rowCount() > 0) {
         $mailExists = true;
     } else {
+
+
+
+
         $sql = "UPDATE User_app SET email=? WHERE id=?";
         $stmt = $db->prepare($sql);
         $stmt->execute([$_POST['email'],$_SESSION['user_id']]);
@@ -59,25 +82,30 @@ if(isset($_POST['password1'])){
     </div>
 </nav>
 
-<main class="content">
+<main class="content left-padded">
 
     <form method="post" action="" class="gapped-form change-account-form">
         <h2>Change email</h2>
-        <div class="form-group col-4">
+        <div class="form-group col-lg-4 col-8">
             <label for="email">Email</label>
             <input type="email" class="form-control" id="email" name="email" required
+                   <?php if ($signedWithFb) echo 'readonly' ?>
                    placeholder="e-mail" value="<?= htmlspecialchars($_SESSION['user_email']) ?>">
         </div>
         <div class="row">
-            <div class="col-4">
-                <button type="submit" class="btn btn-padded btn-success" id="changeEmail">Change</button>
+            <div class="col-lg-4 col-12">
+                <button type="submit" class="btn btn-padded btn-success" id="changeEmail"
+                    <?php if ($signedWithFb) echo 'disabled' ?>
+                >Change</button>
             </div>
-            <div class="col-8">
+            <div class="col-lg-8 col-12">
                 <?php
                 if ($emailChangedSuccessfully){
                     echo '<h3 class="text-success" id="resultAreaEmail">Email changed successfully!</h3>';
                 }elseif ($mailExists){
                     echo '<h3 class="text-danger" id="resultAreaEmail">This email is already in use</h3>';
+                } elseif($signedWithFb){
+                    echo '<h3 class="text-danger" id="resultAreaEmail">Your account uses facebook, email cannot be changed</h3>';
                 } else {
                     echo '<h3 class="text-danger" id="resultAreaEmail"></h3>';
                 }
@@ -87,8 +115,8 @@ if(isset($_POST['password1'])){
     </form>
 
     <form method="post" action="" class="gapped-form change-account-form">
-        <h2>Change password</h2>
-        <div class="form-group col-4">
+        <h2><?= $noPasswordIfSignedWithFb? 'Set up new password' : 'Change password' ?></h2>
+        <div class="form-group col-lg-4 col-8">
             <label for="password1">New password</label>
             <input class="form-control mb-1" type="password" id="password1" name="password1" required
                    placeholder="Password">
@@ -97,7 +125,7 @@ if(isset($_POST['password1'])){
                    placeholder="Repeat password">
         </div>
         <div class="row">
-            <div class="col-4">
+            <div class="col-lg-4 col-8">
                 <button type="submit" name="change" class="btn btn-padded btn-success" id="changePassword">Change
                 </button>
             </div>
