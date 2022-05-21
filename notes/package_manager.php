@@ -40,8 +40,6 @@ if (isset($_POST['add'])) {
     }
     if(isset($_POST['delete'])){
 
-
-
         $sql = "DELETE FROM Note WHERE id=?";
         $stmt = $db->prepare($sql);
         $stmt->execute([$_GET['id']]);
@@ -93,7 +91,7 @@ $packagesWithoutNote = $packagesWithoutNoteQuery->fetchAll(PDO::FETCH_ASSOC);
 <body>
 
 <nav class="navbar navbar-expand-sm navbar-dark bg-primary ms-auto">
-    <div class="navbar-brand"><?= $_SESSION['user_email'] ?></div>
+    <div class="navbar-brand"><?= htmlspecialchars($_SESSION['user_email']) ?></div>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav ms-auto me-5">
             <a class="nav-item nav-link" href="../topics.php">Topics</a>
@@ -107,10 +105,10 @@ $packagesWithoutNote = $packagesWithoutNoteQuery->fetchAll(PDO::FETCH_ASSOC);
 <main class="content">
 
     <div class="d-flex flex-row align-items-center justify-content-center">
-        <div class="col-4 text-center h5 my-3"><?= $noteInPackages[0]['heading'] ?> - packages</div>
+        <div class="col-4 text-center h5 my-3"><?= htmlspecialchars($noteInPackages[0]['heading']) ?> - packages</div>
         <div class="col-4 text-center h5 my-3 text-success"><?= $updatedSuccessfully ? 'Packages updated!' : '&nbsp;' ?></div>
         <div class="col-2 d-flex align-items-center justify-content-center">
-            <a class='btn btn-secondary btn-padded' href="./index.php?topic=<?= $_GET['topic'] ?>">Back</a>
+            <a class='btn btn-secondary btn-padded' href="./index.php?topic=<?= htmlspecialchars($_GET['topic']) ?>">Back</a>
         </div>
     </div>
     <form class='my-3 d-flex flex-row align-items-center justify-content-center' method='post' action=''>
@@ -119,8 +117,8 @@ $packagesWithoutNote = $packagesWithoutNoteQuery->fetchAll(PDO::FETCH_ASSOC);
         foreach ($noteInPackages as $noteInPackage) {
 
             echo "<form class='my-3 d-flex flex-row align-items-center justify-content-center' method='post' action='' >
-    <input type='hidden' name='id' value='" . $noteInPackage['id'] . "' readonly>
-    <div class='col-4 my-auto text-fit d-flex align-items-center justify-content-center' ><div class='h5 text-center text-wrap mw-40'>" . $noteInPackage['name'] . "</div></div>
+    <input type='hidden' name='id' value='" . htmlspecialchars($noteInPackage['id']) . "' readonly>
+    <div class='col-4 my-auto text-fit d-flex align-items-center justify-content-center' ><div class='h5 text-center text-wrap mw-40'>" . htmlspecialchars($noteInPackage['name']) . "</div></div>
      <div class='col-4 d-flex align-items-center justify-content-center'><button type='submit' class='btn btn-padded btn-danger'" . (count($noteInPackages) == 1? "name='delete'>Delete" : "name='remove'>Remove")  . "</button></div>
 </form>    
 ";
@@ -128,8 +126,8 @@ $packagesWithoutNote = $packagesWithoutNoteQuery->fetchAll(PDO::FETCH_ASSOC);
         }
         foreach ($packagesWithoutNote as $package) {
             echo "<form class='my-3 d-flex flex-row align-items-center justify-content-center' method='post' action='' >
-    <input type='hidden' name='id' value='" . $package['id'] . "' readonly>
-    <div class='col-4 my-auto text-fit d-flex align-items-center justify-content-center' ><div class='h5 text-center text-wrap mw-40'>" . $package['name'] . "</div></div>
+    <input type='hidden' name='id' value='" . htmlspecialchars($package['id']) . "' readonly>
+    <div class='col-4 my-auto text-fit d-flex align-items-center justify-content-center' ><div class='h5 text-center text-wrap mw-40'>" . htmlspecialchars($package['name']) . "</div></div>
      <div class='col-4 d-flex align-items-center justify-content-center'><button type='submit' name='add' class='btn btn-padded btn-success'>Add</button></div>
     </form>";
         }

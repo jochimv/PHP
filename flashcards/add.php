@@ -46,7 +46,7 @@ if (!empty($_POST)) {
 <body>
 
 <nav class="navbar navbar-expand-sm navbar-dark bg-primary ms-auto">
-    <div class="navbar-brand"><?= $_SESSION['user_email']?></div>
+    <div class="navbar-brand"><?= htmlspecialchars($_SESSION['user_email'])?></div>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav ms-auto me-5">
             <a class="nav-item nav-link" href="../topics.php">Topics</a>
@@ -60,11 +60,10 @@ if (!empty($_POST)) {
 
 <main class="content">
     <div class="d-flex flex-row align-items-center justify-content-center">
-        <div class="col-6 h5"><?= $_GET['topic'] ?> - add a flashcard</div>
+        <div class="col-6 h5"><?= htmlspecialchars($_GET['topic']) ?> - add a flashcard</div>
         <?php if ($addedSuccessfully) {
             echo '<div class="col-6 text-success h5">New flashcard added!</div>';
         } else if ($flashcardAlreadyExists) {
-
             echo '<div class="col-6 text-danger h5">Flashcard with this name already exists</div>';
         } else {
             echo '<div class="col-6 text-danger h5">&nbsp;</div>';
@@ -91,7 +90,7 @@ if (!empty($_POST)) {
             <button class='btn btn-primary btn-padded'>Add</button>
             </div>
             <div class="col-4">
-                <a class='btn btn-secondary btn-padded' href="./index.php?topic=<?=$_GET['topic']?>">Back</a>
+                <a class='btn btn-secondary btn-padded' href="./index.php?topic=<?=htmlspecialchars($_GET['topic'])?>">Back</a>
             </div>
 
         </div>

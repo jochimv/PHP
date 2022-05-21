@@ -11,7 +11,6 @@ if (!empty($_SESSION['user_id'])) {
 
 $invalidCredentials = false;
 if (!empty($_POST)) {
-    #region zpracování formuláře
     $userQuery = $db->prepare('SELECT * FROM User_app WHERE email=:email LIMIT 1;');
     $userQuery->execute([
         ':email' => trim($_POST['email'])
@@ -31,7 +30,6 @@ if (!empty($_POST)) {
     } else {
         $invalidCredentials = true;
     }
-    #endregion zpracování formuláře
 }
 
 
@@ -63,14 +61,13 @@ if (!empty($_POST)) {
         </div>
         <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
             <form method="post" action="">
-                <!-- Email input -->
+
                 <div class="form-outline mb-3 px-5 px-md-0">
                     <input type="email" id="email" name="email" class="form-control form-control-lg "
                            placeholder="Enter a valid email address"/>
                     <label class="form-label" for="email">Email address</label>
                 </div>
 
-                <!-- Password input -->
                 <div class="form-outline mb-3 px-5 px-md-0">
                     <input type="password" id="password" name="password" class="form-control form-control-lg"
                            placeholder="Enter password"/>

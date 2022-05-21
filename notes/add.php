@@ -5,7 +5,7 @@ require_once '../utils/functions.php';
 $addedSuccessfully = false;
 $noteAlreadyExists = false;
 $id = getTopicId();
-
+$heading = '';
 if (!empty($_POST['heading'])) {
     $noteNameQuery = $db->prepare('SELECT * FROM Note INNER JOIN Topic_Note ON Note.id = Topic_Note.Note_id WHERE Note.heading=:heading AND Topic_Note.Topic_id=:topic_id LIMIT 1;');
 
@@ -18,7 +18,7 @@ if (!empty($_POST['heading'])) {
     if ($noteNameQuery->rowCount() == 1) {
         $noteAlreadyExists = true;
     } else {
-        ;
+
         $saveQuery = $db->prepare('INSERT INTO Note (heading,text) VALUES (:heading,:text);');
         $saveQuery->execute([
             ':heading' => $_POST["heading"],
@@ -30,9 +30,9 @@ if (!empty($_POST['heading'])) {
             ':topic_id' => $id,
             ':note_id' => $noteId
         ]);
+
         $addedSuccessfully = true;
     }
-
 }
 ?>
 
@@ -64,7 +64,7 @@ if (!empty($_POST['heading'])) {
 <body>
 
 <nav class="navbar navbar-expand-sm navbar-dark bg-primary ms-auto">
-    <div class="navbar-brand"><?= $_SESSION['user_email'] ?></div>
+    <div class="navbar-brand"><?= htmlspecialchars($_SESSION['user_email']) ?></div>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav ms-auto me-5">
             <a class="nav-item nav-link" href="../topics.php">Topics</a>
@@ -78,7 +78,7 @@ if (!empty($_POST['heading'])) {
 
 <main class="content">
     <div class="d-flex flex-row align-items-center justify-content-center">
-        <div class="col-6 h5"><?= $_GET['topic'] ?> - add a note</div>
+        <div class="col-6 h5"><?= htmlspecialchars($_GET['topic']) ?> - add a note</div>
         <?php if ($addedSuccessfully) {
             echo '<div class="col-6 text-success h5" id="resultArea">New note added!</div>';
         } else if ($noteAlreadyExists) {
@@ -93,7 +93,7 @@ if (!empty($_POST['heading'])) {
         <div class="d-flex flex-column mb-4">
             <label for="heading">Heading</label>
             <input type="text" name="heading" placeholder="PHP lecture #1" id="heading"
-                   value="<?= $addedSuccessfully? '' : $_POST['heading'] ?? '' ?>">
+                   value="<?= $addedSuccessfully ? '' : (htmlspecialchars($_POST['heading'] ?? '') ) ?>">
         </div>
         <textarea id="summernote" name="content" placeholder="Some fancy text"></textarea>
         <div class="row w-100 mt-4">
@@ -102,7 +102,7 @@ if (!empty($_POST['heading'])) {
             </div>
             <div class="col-2">
                 <div class="col-4 d-flex align-items-center justify-content-center ">
-                    <a class='btn btn-secondary btn-padded' href="./index.php?topic=<?= $_GET['topic'] ?>">Back</a>
+                    <a class='btn btn-secondary btn-padded' href="./index.php?topic=<?= htmlspecialchars($_GET['topic']) ?>">Back</a>
                 </div>
             </div>
         </div>

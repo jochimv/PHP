@@ -88,7 +88,7 @@ if (isset($_GET['id']) && isset($_GET['topic'])) {
 <body>
 
 <nav class="navbar navbar-expand-sm navbar-dark bg-primary ms-auto">
-    <div class="navbar-brand"><?= $_SESSION['user_email'] ?></div>
+    <div class="navbar-brand"><?= htmlspecialchars($_SESSION['user_email']) ?></div>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav ms-auto me-5">
             <a class="nav-item nav-link" href="../topics.php">Topics</a>
@@ -102,7 +102,7 @@ if (isset($_GET['id']) && isset($_GET['topic'])) {
 <main class="content">
 
     <div class="d-flex flex-row align-items-center justify-content-center">
-        <div class="col-6 h5"><?= $_GET['topic'] ?> - update a note</div>
+        <div class="col-6 h5"><?= htmlspecialchars($_GET['topic']) ?> - update a note</div>
         <?php if ($updatedSuccessfully) {
             echo '<div class="col-6 text-success h5" id="resultArea">Updated successfully!</div>';
         } else if ($noteAlreadyExists) {
@@ -115,11 +115,11 @@ if (isset($_GET['id']) && isset($_GET['topic'])) {
 
 
     <form method="post" action="">
-        <input type="hidden" name="id" value="<?= $note['id']?>">
+        <input type="hidden" name="id" value="<?= htmlspecialchars($note['id'])?>">
         <div class="d-flex flex-column mb-4">
             <label for="heading">Heading</label>
             <input type="text" name="heading" placeholder="PHP lecture #1" id="heading"
-                   value="<?= $note['heading'] ?>">
+                   value="<?= htmlspecialchars($note['heading']) ?>">
         </div>
         <textarea id="summernote" name="content" placeholder="Some fancy text"></textarea>
         <div class="row w-100 mt-4">
@@ -128,7 +128,7 @@ if (isset($_GET['id']) && isset($_GET['topic'])) {
             </div>
             <div class="col-2">
                 <div class="col-4 d-flex align-items-center justify-content-center ">
-                    <a class='btn btn-secondary btn-padded' href="./index.php?topic=<?= $_GET['topic'] ?>">Back</a>
+                    <a class='btn btn-secondary btn-padded' href="./index.php?topic=<?= htmlspecialchars($_GET['topic']) ?>">Back</a>
                 </div>
             </div>
         </div>

@@ -88,7 +88,7 @@ $flashcards = $packagesWithoutNoteQuery->fetchAll(PDO::FETCH_ASSOC);
 <body>
 
 <nav class="navbar navbar-expand-sm navbar-dark bg-primary ms-auto">
-    <div class="navbar-brand"><?= $_SESSION['user_email']?></div>
+    <div class="navbar-brand"><?= htmlspecialchars($_SESSION['user_email'])?></div>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav ms-auto me-5">
             <a class="nav-item nav-link active" href="#">Topics</a>
@@ -115,12 +115,12 @@ $flashcards = $packagesWithoutNoteQuery->fetchAll(PDO::FETCH_ASSOC);
     if ($topicExists) {
         echo '
                 <div class="col-12 pb-3">
-                        <p class="text-center text-danger h5 w-100 my-auto" >Topic ' . $_POST['topic'] . ' already exists!</p>
+                        <p class="text-center text-danger h5 w-100 my-auto" >Topic ' . htmlspecialchars($_POST['topic']) . ' already exists!</p>
                 </div>';
     } elseif ($addedSuccessfully) {
         echo '
                 <div class="col-12 pb-3">
-                        <p class="text-center text-success h5 w-100 my-auto" >Topic ' . $_POST['topic'] . ' added successfully!</p>
+                        <p class="text-center text-success h5 w-100 my-auto" >Topic ' . htmlspecialchars($_POST['topic']) . ' added successfully!</p>
                 </div>';
     } elseif ($deletedSuccesfully) {
         echo '
@@ -152,10 +152,10 @@ $flashcards = $packagesWithoutNoteQuery->fetchAll(PDO::FETCH_ASSOC);
         foreach ($flashcards as $topic) {
             echo "
 <form class='row my-3 d-flex'  method='post' action=''>
-    <input type='hidden' name='id' value='" . $topic['id'] . "' readonly>
-    <div class='col my-auto'><p class='h4 text-center'>" . $topic['name'] . "</p></div>
-    <div class='col'><a type='submit' class='btn btn-secondary btn-padded' href='./notes?topic=" . $topic['name'] . "'>Notes</a></div>
-    <div class='col'><a type='submit' href='./flashcards?topic=" . $topic['name'] . "' class='btn btn-success btn-padded'>Flashcards</a></div>
+    <input type='hidden' name='id' value='" . htmlspecialchars($topic['id']) . "' readonly>
+    <div class='col my-auto'><p class='h4 text-center'>" . htmlspecialchars($topic['name']) . "</p></div>
+    <div class='col'><a type='submit' class='btn btn-secondary btn-padded' href='./notes?topic=" . htmlspecialchars($topic['name']) . "'>Notes</a></div>
+    <div class='col'><a type='submit' href='./flashcards?topic=" . htmlspecialchars($topic['name']) . "' class='btn btn-success btn-padded'>Flashcards</a></div>
     <div class='col'><button type='submit' name='archive' class='btn btn-info btn-padded'>Archive</button></div>
     <div class='col'><button type='submit' name='delete' class='btn btn-danger btn-padded'>Delete</button></div>
 </form>    

@@ -31,7 +31,7 @@ $flashcards = $flashcardQuery->fetchAll(PDO::FETCH_ASSOC);
 <body>
 
 <nav class="navbar navbar-expand-sm navbar-dark bg-primary ms-auto">
-    <div class="navbar-brand"><?= $_SESSION['user_email'] ?></div>
+    <div class="navbar-brand"><?= htmlspecialchars($_SESSION['user_email']) ?></div>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav ms-auto me-5">
             <a class="nav-item nav-link" href="../topics.php">Topics</a>
@@ -45,10 +45,10 @@ $flashcards = $flashcardQuery->fetchAll(PDO::FETCH_ASSOC);
 <main class="content">
     <div class="d-flex flex-row align-items-center justify-content-center mb-3">
         <div class="col-6 d-flex align-items-center justify-content-center ">
-            <div class="row text-center h5 my-3"><?= $_GET['topic'] ?> - flashcards</div>
+            <div class="row text-center h5 my-3"><?= htmlspecialchars($_GET['topic']) ?> - flashcards</div>
         </div>
         <div class="col-6 d-flex align-items-center justify-content-center ">
-            <a class='btn btn-danger btn-padded' href="./index.php?topic=<?= $_GET['topic'] ?>">Back</a>
+            <a class='btn btn-danger btn-padded' href="./index.php?topic=<?= htmlspecialchars($_GET['topic']) ?>">Back</a>
         </div>
     </div>
 
@@ -66,15 +66,15 @@ $flashcards = $flashcardQuery->fetchAll(PDO::FETCH_ASSOC);
         echo '<div id="carouselExampleControls" class="carousel slide mx-auto" data-bs-ride="carousel" data-bs-interval="false" >
   <div class="carousel-inner">
   <div class="carousel-item active" style="background-color: grey"><div class="d-flex flex-column h-100 align-items-center justify-content-center"><h2 class="text-white"><u>Flashcards</u><h3><h3 class="text-white"> ' .
-            $_GET['topic'] .
+            htmlspecialchars($_GET['topic']) .
             '</h3></div></div>
   ';
         foreach ($flashcards as $flashcard) {
             echo '<div class="carousel-item" style="background-color: grey"><div class="d-flex flex-column h-100 align-items-center justify-content-center"><h2 class="text-white"><u>Question</u></h2><h3 class="text-white"> '
-                . $flashcard['question'] .
+                . htmlspecialchars($flashcard['question']) .
                 '</h3></div></div>';
             echo '<div class="carousel-item" style="background-color: grey"><div class="d-flex flex-column h-100 align-items-center justify-content-center"><h2 class="text-white"><u>Answer</u></h2><h3 class="text-white"> '
-                . $flashcard['answer'] .
+                . htmlspecialchars($flashcard['answer']) .
                 '</h3></div></div>';
         }
         echo '</div>

@@ -23,7 +23,6 @@ if (!empty($_POST)) {
     }
 
     if (!$mailExists) {
-        //zaregistrování uživatele
         $password = password_hash($_POST['password1'], PASSWORD_DEFAULT);
 
         $query = $db->prepare('INSERT INTO User_app (email, password,admin) VALUES (:email, :password, FALSE);');
@@ -32,15 +31,11 @@ if (!empty($_POST)) {
             ':password' => $password,
         ]);
 
-        //uživatele rovnou přihlásíme
         $_SESSION['user_id'] = $db->lastInsertId();
         $_SESSION['user_email'] = $email;
-
-        //přesměrování na homepage
         header('Location: topics.php');
         exit();
     }
-    #endregion zpracování formuláře
 }
 
 ?>

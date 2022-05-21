@@ -48,7 +48,7 @@ if(isset($_POST['password1'])){
 <body>
 
 <nav class="navbar navbar-expand-sm navbar-dark bg-primary ms-auto">
-    <div class="navbar-brand"><?= $_SESSION['user_email'] ?></div>
+    <div class="navbar-brand"><?= htmlspecialchars($_SESSION['user_email']) ?></div>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav ms-auto me-5">
             <a class="nav-item nav-link" href="./topics.php">Topics</a>
@@ -66,7 +66,7 @@ if(isset($_POST['password1'])){
         <div class="form-group col-4">
             <label for="email">Email</label>
             <input type="email" class="form-control" id="email" name="email" required
-                   placeholder="e-mail" value="<?= $_SESSION['user_email'] ?>">
+                   placeholder="e-mail" value="<?= htmlspecialchars($_SESSION['user_email']) ?>">
         </div>
         <div class="row">
             <div class="col-4">

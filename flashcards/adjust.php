@@ -63,7 +63,7 @@ if (isset($_GET['id'])){
 <body>
 
 <nav class="navbar navbar-expand-sm navbar-dark bg-primary ms-auto">
-    <div class="navbar-brand"><?= $_SESSION['user_email'] ?></div>
+    <div class="navbar-brand"><?= htmlspecialchars($_SESSION['user_email']) ?></div>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav ms-auto me-5">
             <a class="nav-item nav-link" href="../topics.php">Topics</a>
@@ -90,17 +90,17 @@ if (isset($_GET['id'])){
 
 
     <form method="post" action="" class="gapped-form">
-        <input type="hidden" value="<?=$_GET['id']?>" name="id" readonly>
+        <input type="hidden" value="<?=htmlspecialchars($_GET['id'])?>" name="id" readonly>
         <div class="form-group">
             <label for="question">Question</label>
             <input type="text" class="form-control" id="question" name="question" required
-                   placeholder="What is Forrest Gump’s email password?" value="<?=$topic['question'] ?>">
+                   placeholder="What is Forrest Gump’s email password?" value="<?=htmlspecialchars($topic['question']) ?>">
         </div>
 
         <div class="form-group">
             <label for="answer">Answer</label>
             <textarea class="form-control" id="answer" name="answer" required placeholder="1forrest1"
-                      rows="3"><?=$topic['answer'] ?></textarea>
+                      rows="3"><?=htmlspecialchars($topic['answer'])?></textarea>
         </div>
 
         <div class="col-6 row">
@@ -108,7 +108,7 @@ if (isset($_GET['id'])){
                 <button class='btn btn-primary btn-padded'>Adjust</button>
             </div>
             <div class="col-4">
-                <a class='btn btn-secondary btn-padded' href="./manage.php?topic=<?=$topic['name']?>">Back</a>
+                <a class='btn btn-secondary btn-padded' href="./manage.php?topic=<?=htmlspecialchars($topic['name'])?>">Back</a>
             </div>
 
         </div>

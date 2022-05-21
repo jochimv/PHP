@@ -46,7 +46,7 @@ $topics = $topicQuery->fetchAll(PDO::FETCH_ASSOC);
 <body>
 
 <nav class="navbar navbar-expand-sm navbar-dark bg-primary ms-auto">
-    <div class="navbar-brand"><?= $_SESSION['user_email']?></div>
+    <div class="navbar-brand"><?= htmlspecialchars($_SESSION['user_email'])?></div>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav ms-auto me-5">
             <a class="nav-item nav-link" href="./topics.php">Topics</a>
@@ -76,8 +76,8 @@ $topics = $topicQuery->fetchAll(PDO::FETCH_ASSOC);
         foreach ($topics as $topic) {
             echo "
 <form class='row my-3 d-flex flex-row align-items-center justify-content-center'  method='post' action=''>
-    <input type='hidden' name='id' value='" . $topic['id'] . "' readonly>
-    <div class='col-2 my-auto'><p class='h4 text-center'>" . $topic['name'] . "</p></div>
+    <input type='hidden' name='id' value='" . htmlspecialchars($topic['id']) . "' readonly>
+    <div class='col-2 my-auto'><p class='h4 text-center'>" . htmlspecialchars($topic['name']) . "</p></div>
     <div class='col-1 '><button type='submit' name='unarchive' class='btn btn-secondary btn-padded'>Unarchive</button></div>
 </form>    
 ";
