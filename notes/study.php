@@ -69,7 +69,7 @@ if (isset($_GET['id']) && isset($_GET['topic'])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Study</title>
     <link rel="stylesheet" href="../css/inner.css">
 
     <!-- include libraries(jQuery, bootstrap) -->
@@ -83,6 +83,7 @@ if (isset($_GET['id']) && isset($_GET['topic'])) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs5.min.js"></script>
 
     <script src="../js/updateNote.js"></script>
+    <link rel="icon" type="image/png" sizes="32x32" href="../images/favicon-32x32.png">
 </head>
 
 <body>

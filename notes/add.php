@@ -43,7 +43,7 @@ if (!empty($_POST['heading'])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Add note</title>
 
     <link rel="stylesheet" href="../css/inner.css">
 
@@ -58,6 +58,8 @@ if (!empty($_POST['heading'])) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs5.min.js"></script>
 
     <script src="../js/addNote.js"></script>
+
+    <link rel="icon" type="image/png" sizes="32x32" href="../images/favicon-32x32.png">
 
 </head>
 
