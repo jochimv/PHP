@@ -2,14 +2,14 @@
 
 require_once '../utils/user.php';
 require_once '../utils/functions.php';
-$id = getTopicId();
+$topicId = getTopicIdFromUrlSecurely();
 
-$flashcardQuery = $db->prepare('SELECT * FROM Flashcard WHERE Topic_id=:topic_id;');
-$flashcardQuery->execute([
-    ':topic_id' => $id
+$selectAllFlashcardQuery = $db->prepare('SELECT * FROM Flashcard WHERE Topic_id=:topic_id;');
+$selectAllFlashcardQuery->execute([
+    ':topic_id' => $topicId
 ]);
 
-$flashcards = $flashcardQuery->fetchAll(PDO::FETCH_ASSOC);
+$flashcards = $selectAllFlashcardQuery->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 

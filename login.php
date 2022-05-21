@@ -17,11 +17,11 @@ $fbLoginUrl = $fbHelper->getLoginUrl($callbackUrl, $permissions);
 
 $invalidCredentials = false;
 if (!empty($_POST)) {
-    $userQuery = $db->prepare('SELECT * FROM User_app WHERE email=:email LIMIT 1;');
-    $userQuery->execute([
+    $getUserByEmailQuery = $db->prepare('SELECT * FROM User_app WHERE email=:email LIMIT 1;');
+    $getUserByEmailQuery->execute([
         ':email' => trim($_POST['email'])
     ]);
-    if ($user = $userQuery->fetch(PDO::FETCH_ASSOC)) {
+    if ($user = $getUserByEmailQuery->fetch(PDO::FETCH_ASSOC)) {
 
         if (password_verify($_POST['password'], $user['password'])) {
             //heslo je platné => přihlásíme uživatele
@@ -32,13 +32,10 @@ if (!empty($_POST)) {
         } else {
             $invalidCredentials = true;
         }
-
     } else {
         $invalidCredentials = true;
     }
 }
-
-
 ?>
 
 

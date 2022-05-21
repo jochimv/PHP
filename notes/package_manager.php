@@ -2,48 +2,48 @@
 
 require_once '../utils/user.php';
 require_once '../utils/functions.php';
-$id = getTopicId();
+$id = getTopicIdFromUrlSecurely();
 
-$updatedSuccessfully = false;
+$noteUpdatedSuccessfully = false;
 if (isset($_POST['add'])) {
-    $query = $db->prepare('SELECT * FROM Topic_Note WHERE Topic_id=:topic_id AND Note_id=:note_id LIMIT 1;');
+    $postRequestNotFakedQuery = $db->prepare('SELECT * FROM Topic_Note WHERE Topic_id=:topic_id AND Note_id=:note_id LIMIT 1;');
 
-    $query->execute([
+    $postRequestNotFakedQuery->execute([
         ':note_id' => $_GET['id'],
         ':topic_id' => $_POST['id']
     ]);
-    if ($query->rowCount() == 1) {
+    if ($postRequestNotFakedQuery->rowCount() == 1) {
         header('Location: ../topics.php');
     } else {
-        $saveQuery = $db->prepare('INSERT INTO Topic_Note VALUES (:topic_id,:note_id);');
-        $saveQuery->execute([
+        $saveNoteQuery = $db->prepare('INSERT INTO Topic_Note VALUES (:topic_id,:note_id);');
+        $saveNoteQuery->execute([
             ':note_id' => $_GET['id'],
             ':topic_id' => $_POST['id']
         ]);
-        $updatedSuccessfully = true;
+        $noteUpdatedSuccessfully = true;
     }
-} else if (isset($_POST['remove']) || isset($_POST['delete'])){
-    $query = $db->prepare('SELECT * FROM Topic_Note WHERE Topic_id=:topic_id AND Note_id=:note_id LIMIT 1;');
+} else if (isset($_POST['remove']) || isset($_POST['delete'])) {
+    $postRequestNotFakedQuery = $db->prepare('SELECT * FROM Topic_Note WHERE Topic_id=:topic_id AND Note_id=:note_id LIMIT 1;');
 
-    $query->execute([
+    $postRequestNotFakedQuery->execute([
         ':note_id' => $_GET['id'],
         ':topic_id' => $_POST['id']
     ]);
-    if ($query->rowCount() == 0) {
+    if ($postRequestNotFakedQuery->rowCount() == 0) {
 
         header('Location: ../topics.php');
     } else {
-        $sql = "DELETE FROM Topic_Note WHERE Topic_id=? AND Note_id=?";
-        $stmt = $db->prepare($sql);
-        $stmt->execute([$_POST['id'],$_GET['id']]);
-        $updatedSuccessfully = true;
+        $deleteFromBindingTableQuery = "DELETE FROM Topic_Note WHERE Topic_id=? AND Note_id=?";
+        $stmt = $db->prepare($deleteFromBindingTableQuery);
+        $stmt->execute([$_POST['id'], $_GET['id']]);
+        $noteUpdatedSuccessfully = true;
     }
-    if(isset($_POST['delete'])){
+    if (isset($_POST['delete'])) {
 
-        $sql = "DELETE FROM Note WHERE id=?";
-        $stmt = $db->prepare($sql);
+        $deleteFromNoteQuery = "DELETE FROM Note WHERE id=?";
+        $stmt = $db->prepare($deleteFromNoteQuery);
         $stmt->execute([$_GET['id']]);
-        $updatedSuccessfully = true;
+        $noteUpdatedSuccessfully = true;
     }
 }
 
@@ -53,13 +53,13 @@ $getAllNotesQuery->execute([
     ':user_id' => $_SESSION['user_id']
 ]);
 
-if($getAllNotesQuery->rowCount() === 0){
+if ($getAllNotesQuery->rowCount() === 0) {
     header('Location: ../topics.php');
 }
 
 $noteInPackages = $getAllNotesQuery->fetchAll(PDO::FETCH_ASSOC);
 
-$notInQuery = createNotInQuery(extractIds($noteInPackages));
+$notInQuery = createTopicsWithoutIdsQuery(extractIds($noteInPackages));
 $packagesWithoutNoteQuery = $db->prepare($notInQuery);
 
 $packagesWithoutNoteQuery->execute([':user_id' => $_SESSION['user_id']]);
@@ -98,13 +98,15 @@ $packagesWithoutNote = $packagesWithoutNoteQuery->fetchAll(PDO::FETCH_ASSOC);
 <main class="content">
 
     <div class="d-flex flex-row align-items-center justify-content-center">
-        <div class="col-4 text-center h5 my-3 break-word"><?= htmlspecialchars($noteInPackages[0]['heading']) ?> - packages</div>
-        <div class="col-4 text-center h5 my-3 text-success"><?= $updatedSuccessfully ? 'Packages updated!' : '&nbsp;' ?></div>
+        <div class="col-4 text-center h5 my-3 break-word"><?= htmlspecialchars($noteInPackages[0]['heading']) ?> -
+            manage membership in packages
+        </div>
+        <div class="col-4 text-center h5 my-3 text-success"><?= $noteUpdatedSuccessfully ? 'Packages updated!' : '&nbsp;' ?></div>
         <div class="col-2 d-flex align-items-center justify-content-center">
             <a class='btn btn-secondary btn-padded' href="./index.php?topic=<?= htmlspecialchars($_GET['topic']) ?>">Back</a>
         </div>
     </div>
-    <form class='my-3 d-flex flex-row align-items-center justify-content-center' method='post' >
+    <form class='my-3 d-flex flex-row align-items-center justify-content-center' method='post'>
         <?php
 
         foreach ($noteInPackages as $noteInPackage) {
@@ -112,15 +114,15 @@ $packagesWithoutNote = $packagesWithoutNoteQuery->fetchAll(PDO::FETCH_ASSOC);
             echo "<form class='my-3 d-flex flex-row align-items-center justify-content-center' method='post' >
     <input type='hidden' name='id' value='" . htmlspecialchars($noteInPackage['id']) . "'>
     <div class='col-4 my-auto text-fit d-flex align-items-center justify-content-center' ><div class='h5 text-center text-wrap mw-40 break-word'>" . htmlspecialchars($noteInPackage['name']) . "</div></div>
-     <div class='col-4 d-flex align-items-center justify-content-center'><button type='submit' class='btn btn-padded btn-danger'" . (count($noteInPackages) == 1? "name='delete'>Delete" : "name='remove'>Remove")  . "</button></div>
+     <div class='col-4 d-flex align-items-center justify-content-center'><button type='submit' class='btn btn-padded btn-danger'" . (count($noteInPackages) == 1 ? "name='delete'>Delete" : "name='remove'>Remove") . "</button></div>
 </form>    
 ";
 
         }
-        foreach ($packagesWithoutNote as $package) {
+        foreach ($packagesWithoutNote as $packageWithoutNote) {
             echo "<form class='my-3 d-flex flex-row align-items-center justify-content-center' method='post'  >
-    <input type='hidden' name='id' value='" . htmlspecialchars($package['id']) . "'>
-    <div class='col-4 my-auto text-fit d-flex align-items-center justify-content-center' ><div class='h5 text-center text-wrap mw-40 break-word'>" . htmlspecialchars($package['name']) . "</div></div>
+    <input type='hidden' name='id' value='" . htmlspecialchars($packageWithoutNote['id']) . "'>
+    <div class='col-4 my-auto text-fit d-flex align-items-center justify-content-center' ><div class='h5 text-center text-wrap mw-40 break-word'>" . htmlspecialchars($packageWithoutNote['name']) . "</div></div>
      <div class='col-4 d-flex align-items-center justify-content-center'><button type='submit' name='add' class='btn btn-padded btn-success'>Add</button></div>
     </form>";
         }

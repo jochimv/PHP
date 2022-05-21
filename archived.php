@@ -4,29 +4,27 @@ require_once 'utils/user.php';
 
 $unarchivedSuccessfully = false;
 if (isset($_POST['unarchive'])) {
-    $id = $_POST['id'];
-    $checkQuery = $db->prepare('SELECT * FROM Topic WHERE id=:id AND User_id=:user_id LIMIT 1;');
-    $checkQuery->execute([
-        ':id' => $id,
+    $postedId = $_POST['id'];
+    $topicBelongsToUserCheckQuery = $db->prepare('SELECT * FROM Topic WHERE id=:id AND User_id=:user_id LIMIT 1;');
+    $topicBelongsToUserCheckQuery->execute([
+        ':id' => $postedId,
         ':user_id' => $_SESSION['user_id']
     ]);
-    if ($checkQuery->rowCount() == 1) {
-        $sql = "UPDATE Topic SET archived=FALSE WHERE id=?";
-        $stmt = $db->prepare($sql);
-        $stmt->execute([$id]);
+    if ($topicBelongsToUserCheckQuery->rowCount() == 1) {
+        $unarchiveTopicQuery = "UPDATE Topic SET archived=FALSE WHERE id=?";
+        $unarchiveTopicStmt = $db->prepare($unarchiveTopicQuery);
+        $unarchiveTopicStmt->execute([$postedId]);
         $unarchivedSuccessfully = true;
     }
 
 }
 
-
-$topicQuery = $db->prepare('SELECT * FROM Topic WHERE User_id=:user_id AND archived = TRUE;');
-$topicQuery->execute([
+$getAllTopicsQuery = $db->prepare('SELECT * FROM Topic WHERE User_id=:user_id AND archived = TRUE;');
+$getAllTopicsQuery->execute([
     ':user_id' => $_SESSION['user_id']
 ]);
 
-$topics = $topicQuery->fetchAll(PDO::FETCH_ASSOC);
-
+$topics = $getAllTopicsQuery->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 <!DOCTYPE html>
@@ -47,7 +45,7 @@ $topics = $topicQuery->fetchAll(PDO::FETCH_ASSOC);
 <body>
 
 <nav class="navbar navbar-expand-sm navbar-dark bg-primary ms-auto">
-    <div class="navbar-brand max-50"><?= htmlspecialchars($_SESSION['user_email'])?></div>
+    <div class="navbar-brand max-50"><?= htmlspecialchars($_SESSION['user_email']) ?></div>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav ms-auto me-5">
             <a class="nav-item nav-link" href="./topics.php">Topics</a>

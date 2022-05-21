@@ -2,30 +2,29 @@
 require_once '../utils/user.php';
 require_once '../utils/functions.php';
 
-$addedSuccessfully = false;
+$topicId = getTopicIdFromUrlSecurely();
+
+$flashcardAddedSuccessfully = false;
 $flashcardAlreadyExists = false;
-$id = getTopicId();
 if (!empty($_POST)) {
-    $flashcardNameQuery = $db->prepare('SELECT * FROM Flashcard INNER JOIN Topic ON Flashcard.Topic_id = Topic.id WHERE Flashcard.question=:question AND Topic.User_id=:user_id AND Flashcard.Topic_id=:topic_id LIMIT 1;');
-    $flashcardNameQuery->execute([
+    $flashcardExistsCheckQuery = $db->prepare('SELECT * FROM Flashcard INNER JOIN Topic ON Flashcard.Topic_id = Topic.id WHERE Flashcard.question=:question AND Topic.User_id=:user_id AND Flashcard.Topic_id=:topic_id LIMIT 1;');
+    $flashcardExistsCheckQuery->execute([
         ':question' => $_POST['question'],
         ':user_id' => $_SESSION['user_id'],
-        ':topic_id' => $id
+        ':topic_id' => $topicId
     ]);
 
-    if ($flashcardNameQuery->rowCount() == 1) {
-
+    if ($flashcardExistsCheckQuery->rowCount() == 1) {
         $flashcardAlreadyExists = true;
     } else {
-        $saveQuery = $db->prepare('INSERT INTO Flashcard (question,answer,Topic_id) VALUES (:question,:answer,:topic_id);');
-        $saveQuery->execute([
+        $flashcardSaveQuery = $db->prepare('INSERT INTO Flashcard (question,answer,Topic_id) VALUES (:question,:answer,:topic_id);');
+        $flashcardSaveQuery->execute([
             ':question' => $_POST["question"],
             ':answer' => $_POST['answer'],
-            ':topic_id' => $id
+            ':topic_id' => $topicId
         ]);
-        $addedSuccessfully = true;
+        $flashcardAddedSuccessfully = true;
     }
-
 }
 ?>
 
@@ -47,7 +46,7 @@ if (!empty($_POST)) {
 <body>
 
 <nav class="navbar navbar-expand-sm navbar-dark bg-primary ms-auto">
-    <div class="navbar-brand max-50"><?= htmlspecialchars($_SESSION['user_email'])?></div>
+    <div class="navbar-brand max-50"><?= htmlspecialchars($_SESSION['user_email']) ?></div>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav ms-auto me-5">
             <a class="nav-item nav-link" href="../topics.php">Topics</a>
@@ -58,11 +57,10 @@ if (!empty($_POST)) {
     </div>
 </nav>
 
-
 <main class="content">
     <div class="d-flex flex-row align-items-center justify-content-center">
         <div class="col-6 h5 break-word"><?= htmlspecialchars($_GET['topic']) ?> - add a flashcard</div>
-        <?php if ($addedSuccessfully) {
+        <?php if ($flashcardAddedSuccessfully) {
             echo '<div class="col-6 text-success h5" id="resultArea">New flashcard added!</div>';
         } else if ($flashcardAlreadyExists) {
             echo '<div class="col-6 text-danger h5" id="resultArea">Flashcard with this name already exists</div>';
@@ -71,7 +69,6 @@ if (!empty($_POST)) {
         }
         ?>
     </div>
-
 
     <form method="post" class="gapped-form">
         <div class="form-group">
@@ -88,10 +85,11 @@ if (!empty($_POST)) {
 
         <div class="col-6 row">
             <div class="col-4">
-            <button class='btn btn-primary btn-padded' id="add">Add</button>
+                <button class='btn btn-primary btn-padded' id="add">Add</button>
             </div>
             <div class="col-4">
-                <a class='btn btn-secondary btn-padded ml-s' href="./index.php?topic=<?=htmlspecialchars($_GET['topic'])?>">Back</a>
+                <a class='btn btn-secondary btn-padded ml-s'
+                   href="./index.php?topic=<?= htmlspecialchars($_GET['topic']) ?>">Back</a>
             </div>
 
         </div>

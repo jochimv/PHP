@@ -2,8 +2,7 @@
 
 require_once '../utils/user.php';
 require_once '../utils/functions.php';
-$id = getTopicId();
-
+$id = getTopicIdFromUrlSecurely();
 
 $noteAlreadyExists = false;
 $updatedSuccessfully = false;
@@ -16,8 +15,7 @@ if (isset($_POST['heading']) && isset($_POST['content'])) {
     ]);
 
     if ($noteBelongsToUser->rowCount() === 0) {
-       header('Location: ../topics.php');
-
+        header('Location: ../topics.php');
 
     } else {
         // kontrola jestli už existuje nějaká note se stejným jménem
@@ -60,7 +58,6 @@ if (isset($_GET['id']) && isset($_GET['topic'])) {
 }
 
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -116,7 +113,7 @@ if (isset($_GET['id']) && isset($_GET['topic'])) {
 
 
     <form method="post">
-        <input type="hidden" name="id" value="<?= htmlspecialchars($note['id'])?>">
+        <input type="hidden" name="id" value="<?= htmlspecialchars($note['id']) ?>">
         <div class="d-flex flex-column mb-4">
             <label for="heading">Heading</label>
             <input type="text" name="heading" placeholder="PHP lecture #1" id="heading" maxlength="255"
@@ -129,7 +126,8 @@ if (isset($_GET['id']) && isset($_GET['topic'])) {
             </div>
             <div class="col-2">
                 <div class="col-4 d-flex align-items-center justify-content-center ">
-                    <a class='btn btn-secondary btn-padded' href="./index.php?topic=<?= htmlspecialchars($_GET['topic']) ?>">Back</a>
+                    <a class='btn btn-secondary btn-padded'
+                       href="./index.php?topic=<?= htmlspecialchars($_GET['topic']) ?>">Back</a>
                 </div>
             </div>
         </div>
@@ -152,7 +150,7 @@ if (isset($_GET['id']) && isset($_GET['topic'])) {
             $('#summernote').summernote({
                 height: 200
             });
-            $('#summernote').summernote('code','" . $note['text'] ."');
+            $('#summernote').summernote('code','" . $note['text'] . "');
         });
     </script>";
     }

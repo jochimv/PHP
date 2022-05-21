@@ -1,37 +1,35 @@
 <?php
 require_once '../utils/user.php';
 
-$updatedSuccessfully = false;
-if(isset($_POST['id'])){
+$flashcardUpdatedSuccessfully = false;
+if (isset($_POST['id'])) {
     $flashcardId = $_POST['id'];
-    $checkQuery = $db->prepare('SELECT * FROM Flashcard INNER JOIN Topic ON Flashcard.Topic_id = Topic.id WHERE Flashcard.id=:id AND User_id=:user_id LIMIT 1;');
-    $checkQuery->execute([
+    $flashcardIdInPostNotFakedQuery = $db->prepare('SELECT * FROM Flashcard INNER JOIN Topic ON Flashcard.Topic_id = Topic.id WHERE Flashcard.id=:id AND User_id=:user_id LIMIT 1;');
+    $flashcardIdInPostNotFakedQuery->execute([
         ':id' => $flashcardId,
         ':user_id' => $_SESSION['user_id']
     ]);
-    if ($checkQuery->rowCount() == 1) {
-        $sql = "UPDATE Flashcard SET question=?, answer=? WHERE id=?";
-        $stmt = $db->prepare($sql);
-        $stmt->execute([$_POST['question'],$_POST['answer'],$_POST['id']]);
-
-        $updatedSuccessfully = true;
+    if ($flashcardIdInPostNotFakedQuery->rowCount() == 1) {
+        $flashcardUpdateSql = "UPDATE Flashcard SET question=?, answer=? WHERE id=?";
+        $flashcardStmt = $db->prepare($flashcardUpdateSql);
+        $flashcardStmt->execute([$_POST['question'], $_POST['answer'], $_POST['id']]);
+        $flashcardUpdatedSuccessfully = true;
     } else {
+        //id je nafejkované
         header('Location: ../topics.php');
     }
 }
 
-$topic = null;
-if (isset($_GET['id'])){
+if (isset($_GET['id'])) {
     $flashcardId = $_GET['id'];
-    $checkQuery = $db->prepare('SELECT * FROM Flashcard INNER JOIN Topic ON Flashcard.Topic_id = Topic.id WHERE Flashcard.id=:id AND User_id=:user_id LIMIT 1;');
-    $checkQuery->execute([
+    $flashcardIdInPostNotFakedQuery = $db->prepare('SELECT * FROM Flashcard INNER JOIN Topic ON Flashcard.Topic_id = Topic.id WHERE Flashcard.id=:id AND User_id=:user_id LIMIT 1;');
+    $flashcardIdInPostNotFakedQuery->execute([
         ':id' => $flashcardId,
         ':user_id' => $_SESSION['user_id']
     ]);
 
-    if ($checkQuery->rowCount() == 1) {
-
-        $topic = $checkQuery->fetch(PDO::FETCH_ASSOC);
+    if ($flashcardIdInPostNotFakedQuery->rowCount() == 1) {
+        $flashcard = $flashcardIdInPostNotFakedQuery->fetch(PDO::FETCH_ASSOC);
     } else {
         header('Location: ../topics.php');
     }
@@ -75,7 +73,7 @@ if (isset($_GET['id'])){
 
     <div class="d-flex flex-row">
         <div class="col-6 h5">Update flashcard</div>
-        <?php if ($updatedSuccessfully) {
+        <?php if ($flashcardUpdatedSuccessfully) {
             echo '<div class="col-6 text-success h5">Flashcard updated!</div>';
         } else {
             echo '<div class="col-6h5">&nbsp;</div>';
@@ -85,19 +83,19 @@ if (isset($_GET['id'])){
     </div>
 
 
-
     <form method="post" class="gapped-form">
-        <input type="hidden" value="<?=htmlspecialchars($_GET['id'])?>" name="id">
+        <input type="hidden" value="<?= htmlspecialchars($_GET['id']) ?>" name="id">
         <div class="form-group">
             <label for="question">Question</label>
             <input type="text" class="form-control" id="question" name="question" required
-                   placeholder="What is Forrest Gump’s email password?" maxlength="255" value="<?=htmlspecialchars($topic['question']) ?>">
+                   placeholder="What is Forrest Gump’s email password?" maxlength="255"
+                   value="<?= htmlspecialchars($flashcard['question']) ?>">
         </div>
 
         <div class="form-group">
             <label for="answer">Answer</label>
             <textarea class="form-control" id="answer" name="answer" required maxlength="255" placeholder="1forrest1"
-                      rows="3"><?=htmlspecialchars($topic['answer'])?></textarea>
+                      rows="3"><?= htmlspecialchars($flashcard['answer']) ?></textarea>
         </div>
 
         <div class="col-6 row">
@@ -105,14 +103,13 @@ if (isset($_GET['id'])){
                 <button class='btn btn-primary btn-padded'>Adjust</button>
             </div>
             <div class="col-4">
-                <a class='btn btn-secondary btn-padded' href="./manage.php?topic=<?=htmlspecialchars($topic['name'])?>">Back</a>
+                <a class='btn btn-secondary btn-padded'
+                   href="./manage.php?topic=<?= htmlspecialchars($flashcard['name']) ?>">Back</a>
             </div>
 
         </div>
     </form>
 
-
 </main>
 </body>
-
 </html>

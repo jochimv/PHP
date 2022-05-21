@@ -50,21 +50,21 @@ if ($query->rowCount() > 0) {
         $insertQuery = $db->prepare('INSERT INTO User_app (email,facebook_id) VALUES (:email, :facebookId)');
         $insertQuery->execute([
             ':email' => $fbUserEmail,
-            ':facebookId'=>$fbUserId
+            ':facebookId' => $fbUserId
         ]);
 
         $query = $db->prepare('SELECT * FROM User_app WHERE facebook_id=:facebookId LIMIT 1');
         $query->execute([
-            ':facebookId' =>$fbUserId
+            ':facebookId' => $fbUserId
         ]);
-        $user=$query->fetch(PDO::FETCH_ASSOC);
+        $user = $query->fetch(PDO::FETCH_ASSOC);
 
     }
 }
 
-if(!empty($user)){
-    $_SESSION['user_id']=$user['id'];
-    $_SESSION['user_email']=$user['email'];
+if (!empty($user)) {
+    $_SESSION['user_id'] = $user['id'];
+    $_SESSION['user_email'] = $user['email'];
 }
 
 header('Location: ./topics.php');

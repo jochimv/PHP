@@ -1,37 +1,36 @@
 <?php
 require_once '../utils/user.php';
 require_once '../utils/functions.php';
+$topicId = getTopicIdFromUrlSecurely();
 
-$addedSuccessfully = false;
+$noteAddedSuccessfully = false;
 $noteAlreadyExists = false;
-$id = getTopicId();
-$heading = '';
-if (!empty($_POST['heading'])) {
-    $noteNameQuery = $db->prepare('SELECT * FROM Note INNER JOIN Topic_Note ON Note.id = Topic_Note.Note_id WHERE Note.heading=:heading AND Topic_Note.Topic_id=:topic_id LIMIT 1;');
 
-    $noteNameQuery->execute([
+if (!empty($_POST['heading'])) {
+    $noteAlreadyExistsQuery = $db->prepare('SELECT * FROM Note INNER JOIN Topic_Note ON Note.id = Topic_Note.Note_id WHERE Note.heading=:heading AND Topic_Note.Topic_id=:topic_id LIMIT 1;');
+
+    $noteAlreadyExistsQuery->execute([
         ':heading' => $_POST['heading'],
-        ':topic_id' => $id,
+        ':topic_id' => $topicId,
 
     ]);
 
-    if ($noteNameQuery->rowCount() == 1) {
+    if ($noteAlreadyExistsQuery->rowCount() == 1) {
         $noteAlreadyExists = true;
     } else {
 
-        $saveQuery = $db->prepare('INSERT INTO Note (heading,text) VALUES (:heading,:text);');
-        $saveQuery->execute([
+        $saveNoteToNoteTableQuery = $db->prepare('INSERT INTO Note (heading,text) VALUES (:heading,:text);');
+        $saveNoteToNoteTableQuery->execute([
             ':heading' => $_POST["heading"],
             ':text' => $_POST['content'] ?? ''
         ]);
-        $noteId = $db->lastInsertId();
-        $saveQuery2 = $db->prepare('INSERT INTO Topic_Note (Topic_id,Note_id) VALUES (:topic_id,:note_id);');
-        $saveQuery2->execute([
-            ':topic_id' => $id,
-            ':note_id' => $noteId
+        $insertedNoteId = $db->lastInsertId();
+        $saveNoteToBindingTableQuery = $db->prepare('INSERT INTO Topic_Note (Topic_id,Note_id) VALUES (:topic_id,:note_id);');
+        $saveNoteToBindingTableQuery->execute([
+            ':topic_id' => $topicId,
+            ':note_id' => $insertedNoteId
         ]);
-
-        $addedSuccessfully = true;
+        $noteAddedSuccessfully = true;
     }
 }
 ?>
@@ -48,7 +47,7 @@ if (!empty($_POST['heading'])) {
     <link rel="stylesheet" href="../css/inner.css">
 
     <!-- include libraries(jQuery, bootstrap) -->
-    <script  src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -81,7 +80,7 @@ if (!empty($_POST['heading'])) {
 <main class="content">
     <div class="d-flex flex-row align-items-center justify-content-center">
         <div class="col-6 h5 break-word"><?= htmlspecialchars($_GET['topic']) ?> - add a note</div>
-        <?php if ($addedSuccessfully) {
+        <?php if ($noteAddedSuccessfully) {
             echo '<div class="col-6 text-success h5" id="resultArea">New note added!</div>';
         } else if ($noteAlreadyExists) {
             echo '<div class="col-6 text-danger h5" id="resultArea">Note with this name already exists</div>';
@@ -91,11 +90,11 @@ if (!empty($_POST['heading'])) {
         ?>
     </div>
 
-    <form method="post" >
+    <form method="post">
         <div class="d-flex flex-column mb-4">
             <label for="heading">Heading</label>
             <input type="text" name="heading" placeholder="PHP lecture #1" id="heading" maxlength="255"
-                   value="<?= $addedSuccessfully ? '' : (htmlspecialchars($_POST['heading'] ?? '') ) ?>">
+                   value="<?= $noteAddedSuccessfully ? '' : (htmlspecialchars($_POST['heading'] ?? '')) ?>">
         </div>
         <textarea id="summernote" name="content" placeholder="Some fancy text"></textarea>
         <div class="row w-100 mt-4">
@@ -104,7 +103,8 @@ if (!empty($_POST['heading'])) {
             </div>
             <div class="col-2">
                 <div class="col-4 d-flex align-items-center justify-content-center ">
-                    <a class='btn btn-secondary btn-padded' href="./index.php?topic=<?= htmlspecialchars($_GET['topic']) ?>">Back</a>
+                    <a class='btn btn-secondary btn-padded'
+                       href="./index.php?topic=<?= htmlspecialchars($_GET['topic']) ?>">Back</a>
                 </div>
             </div>
         </div>

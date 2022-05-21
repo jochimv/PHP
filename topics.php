@@ -2,10 +2,10 @@
 
 require_once 'utils/user.php';
 
-$topicExists = false;
-$addedSuccessfully = false;
-$deletedSuccesfully = false;
-$archivedSuccesfully = false;
+$topicAlreadyExists = false;
+$topicAddedSuccessfully = false;
+$topicDeletedSuccessfully = false;
+$topicArchivedSuccessfully = false;
 if (!empty($_POST)) {
     if (!empty($_POST['topic'])) {
         $packagesWithoutNoteQuery = $db->prepare('SELECT * FROM Topic WHERE name=:name AND User_id=:user_id LIMIT 1;');
@@ -14,61 +14,58 @@ if (!empty($_POST)) {
             ':user_id' => $_SESSION['user_id']
         ]);
         if ($packagesWithoutNoteQuery->rowCount() > 0) {
-            $topicExists = true;
+            $topicAlreadyExists = true;
         } else {
 
-            $saveQuery = $db->prepare('INSERT INTO Topic (name,archived,User_id) VALUES (:name,FALSE,:user_id);');
-            $saveQuery->execute([
+            $saveTopicQuery = $db->prepare('INSERT INTO Topic (name,archived,User_id) VALUES (:name,FALSE,:user_id);');
+            $saveTopicQuery->execute([
                 ':name' => $_POST["topic"],
                 ':user_id' => $_SESSION['user_id']
             ]);
-            $addedSuccessfully = true;
+            $topicAddedSuccessfully = true;
         }
     } elseif (isset($_POST['delete'])) {
-        $id = $_POST['id'];
-        $checkQuery = $db->prepare('SELECT * FROM Topic WHERE id=:id AND User_id=:user_id LIMIT 1;');
-        $checkQuery->execute([
-            ':id' => $id,
+        $postedId = $_POST['id'];
+        $verifyTopicOwnershipQuery = $db->prepare('SELECT * FROM Topic WHERE id=:id AND User_id=:user_id LIMIT 1;');
+        $verifyTopicOwnershipQuery->execute([
+            ':id' => $postedId,
             ':user_id' => $_SESSION['user_id']
         ]);
-        if ($checkQuery->rowCount() == 1) {
+        if ($verifyTopicOwnershipQuery->rowCount() == 1) {
 
-            $sql = "DELETE FROM Topic WHERE id=?";
-            $stmt = $db->prepare($sql);
-            $stmt->execute([$id]);
+            $deleteTopicQuery = "DELETE FROM Topic WHERE id=?";
+            $deleteTopicStmt = $db->prepare($deleteTopicQuery);
+            $deleteTopicStmt->execute([$postedId]);
 
 
             $db->exec("DELETE FROM Note WHERE id NOT IN (SELECT Note_id FROM Topic_Note)");
 
-            $deletedSuccesfully = true;
-
-
+            $topicDeletedSuccessfully = true;
         }
 
 
     } elseif (isset($_POST['archive'])) {
-        $id = $_POST['id'];
-        $checkQuery = $db->prepare('SELECT * FROM Topic WHERE id=:id AND User_id=:user_id LIMIT 1;');
-        $checkQuery->execute([
-            ':id' => $id,
+        $postedId = $_POST['id'];
+        $verifyTopicOwnershipQuery = $db->prepare('SELECT * FROM Topic WHERE id=:id AND User_id=:user_id LIMIT 1;');
+        $verifyTopicOwnershipQuery->execute([
+            ':id' => $postedId,
             ':user_id' => $_SESSION['user_id']
         ]);
-        if ($checkQuery->rowCount() == 1) {
-            $sql = "UPDATE Topic SET archived=TRUE WHERE id=?";
-            $stmt = $db->prepare($sql);
-            $stmt->execute([$id]);
-            $archivedSuccesfully = true;
+        if ($verifyTopicOwnershipQuery->rowCount() == 1) {
+            $archiveTopicQuery = "UPDATE Topic SET archived=TRUE WHERE id=?";
+            $archiveTopicStmt = $db->prepare($archiveTopicQuery);
+            $archiveTopicStmt->execute([$postedId]);
+            $topicArchivedSuccessfully = true;
         }
     }
 }
 
-$packagesWithoutNoteQuery = $db->prepare('SELECT * FROM Topic WHERE User_id=:user_id AND archived = FALSE;');
-$packagesWithoutNoteQuery->execute([
+$getTopicsQuery = $db->prepare('SELECT * FROM Topic WHERE User_id=:user_id AND archived = FALSE;');
+$getTopicsQuery->execute([
     ':user_id' => $_SESSION['user_id']
 ]);
 
-$flashcards = $packagesWithoutNoteQuery->fetchAll(PDO::FETCH_ASSOC);
-
+$topics = $getTopicsQuery->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 <!DOCTYPE html>
@@ -105,8 +102,9 @@ $flashcards = $packagesWithoutNoteQuery->fetchAll(PDO::FETCH_ASSOC);
     <form method="post" class="my-3">
         <div class="row align-items-center justify-content-center">
             <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-                <input type="text" id="text" name="topic" maxlength="255" minlength="1" class="form-control form-control-lg "
-                       placeholder="Add a new topic" <?php if ($topicExists) {
+                <input type="text" id="text" name="topic" maxlength="255" minlength="1"
+                       class="form-control form-control-lg "
+                       placeholder="Add a new topic" <?php if ($topicAlreadyExists) {
                     echo 'value="' . $_POST['topic'] . '"';
                 } ?>
                 />
@@ -117,22 +115,22 @@ $flashcards = $packagesWithoutNoteQuery->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </form>
     <?php
-    if ($topicExists) {
+    if ($topicAlreadyExists) {
         echo '
                 <div class="col-12 pb-3">
                         <p class="text-center text-danger h5 w-100 my-auto break-word" >Topic ' . htmlspecialchars($_POST['topic']) . ' already exists!</p>
                 </div>';
-    } elseif ($addedSuccessfully) {
+    } elseif ($topicAddedSuccessfully) {
         echo '
                 <div class="col-12 pb-3">
                         <p class="text-center text-success h5 w-100 my-auto break-word" >Topic ' . htmlspecialchars($_POST['topic']) . ' added successfully!</p>
                 </div>';
-    } elseif ($deletedSuccesfully) {
+    } elseif ($topicDeletedSuccessfully) {
         echo '
                 <div class="col-12 pb-3">
                         <p class="text-center text-success h5 w-100 my-auto" >Topic deleted successfully!</p>
                 </div>';
-    } elseif ($archivedSuccesfully) {
+    } elseif ($topicArchivedSuccessfully) {
         echo '
                 <div class="col-12 pb-3">
                         <p class="text-center text-success h5 w-100 my-auto" >Topic archived successfully!</p>
@@ -146,7 +144,7 @@ $flashcards = $packagesWithoutNoteQuery->fetchAll(PDO::FETCH_ASSOC);
     ?>
 
     <?php
-    if (empty($flashcards)) {
+    if (empty($topics)) {
         echo "
 <div class='row my-3 d-flex flex-row align-items-center justify-content-center'> 
 <div class='col-12 my-auto'><p class='h2 text-center'>No topics there buddy</p>
@@ -154,7 +152,7 @@ $flashcards = $packagesWithoutNoteQuery->fetchAll(PDO::FETCH_ASSOC);
 </div>";
 
     } else {
-        foreach ($flashcards as $topic) {
+        foreach ($topics as $topic) {
             echo "
 <div class='d-flex flex-row align-items-center justify-content-center'><p class='h4 break-word'>" . htmlspecialchars($topic['name']) . "</p></div>
 <form class='row my-3 d-flex'  method='post'>

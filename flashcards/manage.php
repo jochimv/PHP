@@ -1,31 +1,30 @@
 <?php
 require_once '../utils/user.php';
 require_once '../utils/functions.php';
-$topicId = getTopicId();
+$topicId = getTopicIdFromUrlSecurely();
 
-$deletedSuccessfully = false;
+$flashcardDeletedSuccessfully = false;
 if (isset($_POST['delete'])) {
     $flashcardId = $_POST['id'];
-    $checkQuery = $db->prepare('SELECT * FROM Flashcard INNER JOIN Topic ON Flashcard.Topic_id = Topic.id WHERE Flashcard.id=:id AND User_id=:user_id LIMIT 1;');
-    $checkQuery->execute([
+    $flashcardOwnershipCheckQuery = $db->prepare('SELECT * FROM Flashcard INNER JOIN Topic ON Flashcard.Topic_id = Topic.id WHERE Flashcard.id=:id AND User_id=:user_id LIMIT 1;');
+    $flashcardOwnershipCheckQuery->execute([
         ':id' => $flashcardId,
         ':user_id' => $_SESSION['user_id']
     ]);
-    if ($checkQuery->rowCount() == 1) {
-        $sql = "DELETE FROM Flashcard WHERE id=?";
-        $stmt = $db->prepare($sql);
-        $stmt->execute([$flashcardId]);
-        $deletedSuccessfully = true;
+    if ($flashcardOwnershipCheckQuery->rowCount() == 1) {
+        $flashcardDeleteSql = "DELETE FROM Flashcard WHERE id=?";
+        $flashcardStmt = $db->prepare($flashcardDeleteSql);
+        $flashcardStmt->execute([$flashcardId]);
+        $flashcardDeletedSuccessfully = true;
     }
 }
 
-
-$flashcardQuery = $db->prepare('SELECT * FROM Flashcard WHERE Topic_id=:id;');
-$flashcardQuery->execute([
+$selectAllFlashcardsQuery = $db->prepare('SELECT * FROM Flashcard WHERE Topic_id=:id;');
+$selectAllFlashcardsQuery->execute([
     ':id' => $topicId
 ]);
 
-$flashcards = $flashcardQuery->fetchAll(PDO::FETCH_ASSOC);
+$flashcards = $selectAllFlashcardsQuery->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
@@ -61,10 +60,12 @@ $flashcards = $flashcardQuery->fetchAll(PDO::FETCH_ASSOC);
 <main class="content">
     <div class="d-flex flex-row align-items-center justify-content-center">
         <div class="col-4 d-flex align-items-center justify-content-center ">
-            <div class="row text-center h5 my-3 break-word"><?= htmlspecialchars($_GET['topic']) ?> - manage flashcards</div>
+            <div class="row text-center h5 my-3 break-word"><?= htmlspecialchars($_GET['topic']) ?> - manage
+                flashcards
+            </div>
         </div>
         <div class="col-4 d-flex align-items-center justify-content-center ">
-            <div class="row text-center text-success h5 my-3"><?php echo $deletedSuccessfully ? 'Flashcard deleted successfully!' : '&nbsp;' ?></div>
+            <div class="row text-center text-success h5 my-3"><?php echo $flashcardDeletedSuccessfully ? 'Flashcard deleted successfully!' : '&nbsp;' ?></div>
         </div>
         <div class="col-4 d-flex align-items-center justify-content-center ">
             <a class='btn btn-secondary btn-padded' href="./index.php?topic=<?= htmlspecialchars($_GET['topic']) ?>">Back</a>

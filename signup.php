@@ -1,6 +1,5 @@
 <?php
 error_reporting(E_ERROR | E_PARSE);
-//načteme připojení k databázi a inicializujeme session
 require_once 'utils/user.php';
 require_once 'utils/facebook.php';
 
@@ -18,29 +17,27 @@ $fbLoginUrl = $fbHelper->getLoginUrl($callbackUrl, $permissions);
 
 
 if (!empty($_POST)) {
-
-    $email = $_POST['email'];
+    $postedEmail = $_POST['email'];
     $mailExists = false;
-    //kontrola, jestli již není e-mail registrovaný
-    $mailQuery = $db->prepare('SELECT * FROM User_app WHERE email=:email LIMIT 1;');
-    $mailQuery->execute([
-        ':email' => $email
+    $getUserByEmailQuery = $db->prepare('SELECT * FROM User_app WHERE email=:email LIMIT 1;');
+    $getUserByEmailQuery->execute([
+        ':email' => $postedEmail
     ]);
-    if ($mailQuery->rowCount() > 0) {
+    if ($getUserByEmailQuery->rowCount() > 0) {
         $mailExists = true;
     }
 
     if (!$mailExists) {
-        $password = password_hash($_POST['password1'], PASSWORD_DEFAULT);
+        $hashedPassword = password_hash($_POST['password1'], PASSWORD_DEFAULT);
 
-        $query = $db->prepare('INSERT INTO User_app (email, password) VALUES (:email, :password);');
-        $query->execute([
-            ':email' => $email,
-            ':password' => $password,
+        $insertNewUserQuery = $db->prepare('INSERT INTO User_app (email, password) VALUES (:email, :password);');
+        $insertNewUserQuery->execute([
+            ':email' => $postedEmail,
+            ':password' => $hashedPassword,
         ]);
 
         $_SESSION['user_id'] = $db->lastInsertId();
-        $_SESSION['user_email'] = $email;
+        $_SESSION['user_email'] = $postedEmail;
         header('Location: topics.php');
         exit();
     }
@@ -125,5 +122,4 @@ if (!empty($_POST)) {
 
 
 </body>
-
 </html>

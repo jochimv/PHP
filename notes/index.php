@@ -2,23 +2,23 @@
 
 require_once '../utils/user.php';
 require_once '../utils/functions.php';
-$id = getTopicId();
+$id = getTopicIdFromUrlSecurely();
 
-$deletedSuccesfully = false;
+$deletedSuccessfully = false;
 if (isset($_POST['delete'])) {
 
-    $noteBelongsToUser = $db->prepare('SELECT * FROM Note INNER JOIN Topic_Note ON Note.id = Topic_Note.Note_id WHERE Topic_Note.Topic_id=:topic_id AND Note.id=:id  LIMIT 1;');
+    $noteBelongsToUserQuery = $db->prepare('SELECT * FROM Note INNER JOIN Topic_Note ON Note.id = Topic_Note.Note_id WHERE Topic_Note.Topic_id=:topic_id AND Note.id=:id  LIMIT 1;');
 
-    $noteBelongsToUser->execute([
+    $noteBelongsToUserQuery->execute([
         ':topic_id' => $id,
         ':id' => $_POST['id']
     ]);
 
-    if ($noteBelongsToUser->rowCount() == 1) {
-        $sql = "DELETE FROM Note WHERE id=?";
-        $stmt = $db->prepare($sql);
-        $stmt->execute([$_POST['id']]);
-        $deletedSuccesfully = true;
+    if ($noteBelongsToUserQuery->rowCount() == 1) {
+        $deleteNoteQuery = "DELETE FROM Note WHERE id=?";
+        $deleteNoteStmt = $db->prepare($deleteNoteQuery);
+        $deleteNoteStmt->execute([$_POST['id']]);
+        $deletedSuccessfully = true;
     } else {
         header('Location: ../topics.php');
     }
@@ -71,9 +71,10 @@ if ($allNotesQuery->rowCount() > 0) {
 <main class="content">
     <div class="d-flex flex-row align-items-center justify-content-center">
         <div class="col-3 text-center h5 my-3 break-word"><?= htmlspecialchars($_GET['topic']) ?> - notes</div>
-        <div class="col-3 text-center h5 my-3 text-success"><?= $deletedSuccesfully ? 'Note deleted!' : '&nbsp;' ?></div>
+        <div class="col-3 text-center h5 my-3 text-success"><?= $deletedSuccessfully ? 'Note deleted!' : '&nbsp;' ?></div>
         <div class='col-2 d-flex align-items-center justify-content-center '><a
-                    href='./add.php?topic=<?= htmlspecialchars($_GET['topic']) ?>' class='btn btn-success btn-padded'>Add</a></div>
+                    href='./add.php?topic=<?= htmlspecialchars($_GET['topic']) ?>' class='btn btn-success btn-padded'>Add</a>
+        </div>
         <div class="col-2 d-flex align-items-center justify-content-center ml-s">
             <a class='btn btn-secondary btn-padded' href="../topics.php">Back</a>
         </div>
@@ -88,10 +89,10 @@ if ($allNotesQuery->rowCount() > 0) {
     } else {
         foreach ($notes as $note) {
             echo "<form class='my-3 d-flex flex-row align-items-center justify-content-center' method='post' >
-    <input type='hidden' name='id' value='" .htmlspecialchars($note['id']) . "'>
+    <input type='hidden' name='id' value='" . htmlspecialchars($note['id']) . "'>
     <div class='col-4 my-auto text-fit d-flex align-items-center justify-content-center' ><a class='h5 text-center text-wrap mw-40 break-word' href='study.php?topic=" . htmlspecialchars($_GET['topic']) . "&id=" . htmlspecialchars($note['id']) . "'>" . htmlspecialchars($note['heading']) . "</a></div>
      <div class='col-4 d-flex align-items-center justify-content-center'><button type='submit' name='delete' class='btn btn-danger btn-padded'>Delete everywhere</button></div>
-     <div class='col-4 d-flex align-items-center justify-content-center'><a href='package_manager.php?topic=" .htmlspecialchars($_GET['topic'])."&id=". htmlspecialchars($note['id']) . "' class='btn btn-info btn-padded ml-s'>Adjust packages</a></div>
+     <div class='col-4 d-flex align-items-center justify-content-center'><a href='package_manager.php?topic=" . htmlspecialchars($_GET['topic']) . "&id=" . htmlspecialchars($note['id']) . "' class='btn btn-info btn-padded ml-s'>Adjust packages</a></div>
 </form>    
 ";
         }

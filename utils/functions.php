@@ -1,8 +1,8 @@
 <?php
 
-function getTopicId()
+function getTopicIdFromUrlSecurely()
 {
-    require (realpath(dirname(__FILE__) . '/db.php'));
+    require(realpath(dirname(__FILE__) . '/db.php'));
     if (!isset($_GET['topic'])) {
         header('Location: ../topics.php');
     } else {
@@ -20,20 +20,22 @@ function getTopicId()
     }
 }
 
-function extractIds($data){
+function extractIds($data)
+{
     $values = [];
-    foreach ($data as $piece){
-        array_push($values,$piece['Topic_id']);
+    foreach ($data as $piece) {
+        array_push($values, $piece['Topic_id']);
     }
     return $values;
 }
 
-function createNotInQuery($ids){
-    if(empty($ids)){
+function createTopicsWithoutIdsQuery($ids)
+{
+    if (empty($ids)) {
         return 'SELECT * FROM Topic';
     }
     $query = "SELECT * FROM Topic WHERE User_id=:user_id AND id NOT IN (";
-    foreach ($ids as $id){
+    foreach ($ids as $id) {
         $query = $query . $id . ',';
     }
     return substr($query, 0, -1) . ');';
