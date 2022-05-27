@@ -47,7 +47,6 @@ if (isset($_POST['password1'])) {
 
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 

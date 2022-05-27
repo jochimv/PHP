@@ -15,10 +15,10 @@ $callbackUrl = htmlspecialchars('https://eso.vse.cz/~jocv00/app/fb-callback.php'
 
 $fbLoginUrl = $fbHelper->getLoginUrl($callbackUrl, $permissions);
 
+$mailExists = false;
 
 if (!empty($_POST)) {
     $postedEmail = $_POST['email'];
-    $mailExists = false;
     $getUserByEmailQuery = $db->prepare('SELECT * FROM User_app WHERE email=:email LIMIT 1;');
     $getUserByEmailQuery->execute([
         ':email' => $postedEmail
@@ -92,7 +92,11 @@ if (!empty($_POST)) {
                 </div>
 
                 <div class="text-center px-5">
-                    <p id="resultArea" class="fw-bold text-danger"></p>
+                    <p id="resultArea" class="fw-bold text-danger"><?php
+                        if($mailExists){
+                            echo 'This email is already taken';
+                        }
+                        ?></p>
                 </div>
 
                 <div class="text-center mt-4 pt-2 row">
