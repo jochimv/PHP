@@ -11,7 +11,7 @@ $selectUserByEmailQuery = $db->prepare('SELECT * FROM User_app WHERE email=:emai
 $selectUserByEmailQuery->execute([':email' => $_SESSION['user_email']]);
 $user = $selectUserByEmailQuery->fetch(PDO::FETCH_ASSOC);
 
-if (isset($user['facebook_id'])) {
+if (!empty($user['facebook_id'])) {
     $userSignedWithFb = true;
 }
 
@@ -64,7 +64,6 @@ if (isset($_POST['password1'])) {
 </head>
 
 <body>
-
 <nav class="navbar navbar-expand-sm navbar-dark bg-primary ms-auto">
     <div class="navbar-brand max-50"><?= htmlspecialchars($_SESSION['user_email']) ?></div>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
